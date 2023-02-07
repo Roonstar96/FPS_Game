@@ -947,7 +947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &643283939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2438,9 +2438,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1466544386}
   - component: {fileID: 1466544385}
+  - component: {fileID: 1466544382}
   - component: {fileID: 1466544384}
   - component: {fileID: 1466544383}
-  - component: {fileID: 1466544382}
   m_Layer: 0
   m_Name: BigWeapon_test
   m_TagString: Untagged
@@ -2456,7 +2456,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466544381}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 73.96, y: 17.081583, z: 0.2}
@@ -2712,7 +2712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1642697919}
   - component: {fileID: 1642697918}
-  - component: {fileID: 1642697917}
+  - component: {fileID: 1642697920}
   - component: {fileID: 1642697916}
   - component: {fileID: 1642697915}
   m_Layer: 0
@@ -2747,19 +2747,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collect: 3
---- !u!65 &1642697917
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642697914}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 9.96, y: 14.04, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &1642697918
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2827,6 +2814,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1642697920
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642697914}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 12.89, y: 13.57, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1694598238
 GameObject:
   m_ObjectHideFlags: 0
