@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform weapon;
     [SerializeField] private GameObject projectile;
 
-    bool isFiring;
     private float mouseX;
     private float moveX;
     private float moveZ;
@@ -20,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        isFiring = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -33,20 +32,34 @@ public class PlayerMovement : MonoBehaviour
         moveChar = transform.right * moveX + transform.forward * moveZ;
         cont.Move(moveChar * playerSpeed * Time.deltaTime);
 
-        if (Input.GetKeyDown("space"))
+        if (!AmmoUI.ammoLeft)
         {
-            isFiring = true;
+            Debug.Log("No ammo");
         }
-
-        Shooting();
+        else
+        {
+            Shooting();
+        }
     }
     private void Shooting()
     {
-        if (isFiring)
+
+        if (Input.GetMouseButtonDown(0))
         {
-            GameObject bullet = (GameObject)Instantiate(projectile, weapon.transform.position, Quaternion.identity);
-            bullet.gameObject.GetComponent<Rigidbody>().velocity = playerRotation.transform.forward * 50;
-            isFiring = false;
+            if(MagUI.mag == 0)
+            {
+                MagUI.mag -= 1;
+                Debug.Log("Reloading");
+            }
+
+            else
+            {
+                Debug.Log("BANG!");
+                MagUI.mag -= 1;
+
+                GameObject bullet = (GameObject)Instantiate(projectile, weapon.transform.position, Quaternion.identity);
+                bullet.gameObject.GetComponent<Rigidbody>().velocity = playerRotation.transform.forward * 50;
+            }
         }
     }
 }
