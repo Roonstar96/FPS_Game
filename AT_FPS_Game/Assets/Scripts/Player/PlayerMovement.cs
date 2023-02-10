@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private CharacterController cont;
-    [SerializeField] private Transform playerRotation;
-    [SerializeField] private float playerSpeed;
-    [SerializeField] private float sensitivity;
-
-    [SerializeField] private Transform weapon;
-    [SerializeField] private GameObject projectile;
+    [Header("Movement and camera settings")]
+    [SerializeField] private CharacterController _cont;
+    [SerializeField] private Transform _playerRotation;
+    [SerializeField] private float _playerSpeed;
+    [SerializeField] private float _sensitivity;
 
     private float mouseX;
     private float moveX;
@@ -24,42 +22,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        mouseX = Input.GetAxis("Mouse X") * _sensitivity * Time.deltaTime;
         moveX = Input.GetAxis("Horizontal");
         moveZ = Input.GetAxis("Vertical");
 
-        playerRotation.Rotate(Vector3.up * mouseX);
+        _playerRotation.Rotate(Vector3.up * mouseX);
         moveChar = transform.right * moveX + transform.forward * moveZ;
-        cont.Move(moveChar * playerSpeed * Time.deltaTime);
-
-        if (!AmmoUI.ammoLeft)
-        {
-            Debug.Log("No ammo");
-        }
-        else
-        {
-            Shooting();
-        }
-    }
-    private void Shooting()
-    {
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if(MagUI.mag == 0)
-            {
-                MagUI.mag -= 1;
-                Debug.Log("Reloading");
-            }
-
-            else
-            {
-                Debug.Log("BANG!");
-                MagUI.mag -= 1;
-
-                GameObject bullet = (GameObject)Instantiate(projectile, weapon.transform.position, Quaternion.identity);
-                bullet.gameObject.GetComponent<Rigidbody>().velocity = playerRotation.transform.forward * 50;
-            }
-        }
+        _cont.Move(moveChar * _playerSpeed * Time.deltaTime);
     }
 }
