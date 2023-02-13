@@ -24,6 +24,9 @@ public class Enemy : MonoBehaviour
     [Header("Attack settings")]
     [SerializeField] private Transform _origin;
     [SerializeField] private int _attackRange;
+    [SerializeField] private float _attackRadius;
+    [SerializeField] private LayerMask _isPlayer;
+    //[SerializeField] private bool _inAttackRange;
 
     private float _timer;
     private bool _patrolling;
@@ -66,7 +69,7 @@ public class Enemy : MonoBehaviour
         gameObject.transform.position = _patrolPoint1.position;
 
         _patrolling = true;
-        _attacking = false;
+        _attacking = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
         _dying = false;
 
         atOne = true;
@@ -95,6 +98,7 @@ public class Enemy : MonoBehaviour
     {
         while(_patrolling)
         {
+
             if (gameObject.transform.position == _patrolPoint1.position)
             {
                 _timer = float.Epsilon;

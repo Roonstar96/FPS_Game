@@ -3,44 +3,100 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+enum TypeOfEnemy
+{
+    regular,
+    medium,
+    heavy,
+    miniBoss
+}
 public class Enemy_2 : MonoBehaviour
 {
+    [Header("Basic settings")]
+    [SerializeField] private TypeOfEnemy _enemyType;
+    [SerializeField] private int _attack;
+    public int _health;
+
     [Header("AI Variables")]
     public NavMeshAgent agent;
-    public Transform player;
-    public LayerMask isGround, isPlayer;
+    [SerializeField] private Transform _player;
+    [SerializeField] private LayerMask _isGround, _isPlayer;
 
     [Header("Patrol settings")]
-    public Vector3 patrolPoint;
-    public float patrolPointRange;
-    public float sightRange, attackRange;
-    bool newPatrolPoint;
-    bool inSightRange;
+    [SerializeField] private Vector3 _patrolPoint;
+    [SerializeField] private float _patrolPointRange;
+    [SerializeField] private float _sightRadius, _attackRadius;
+    [SerializeField] private bool _newPatrolPoint;
+    [SerializeField] private bool _inSightRange;
 
     [Header("Attack Settings")]
-    public float attackTime;
-    bool InAttackRange;
-    bool isAttacking;
+    [SerializeField] private int _attackRange; 
+    [SerializeField] private float _attackTime;
+    [SerializeField] private bool _inAttackRange;
+    [SerializeField] private bool _isAttacking;
 
 
     private void Awake()
     {
+        switch (_enemyType)
+        {
+            case (TypeOfEnemy.regular):
+                {
+                    _attack = 1;
+                    _health = 3;
+                    _sightRadius = 20;
+                    _attackRadius = 15;
+                    _attackRange = 15;
+                    _attackTime = 2;
+                    break;
+                }
+            case (TypeOfEnemy.medium):
+                {
+                    _attack = 2;
+                    _health = 4;
+                    _sightRadius = 20;
+                    _attackRadius = 15;
+                    _attackRange = 15;
+                    _attackTime = 2;
+                    break;
+                }
+            case (TypeOfEnemy.heavy):
+                {
+                    _attack = 3;
+                    _health = 5;
+                    _sightRadius = 20;
+                    _attackRadius = 15;
+                    _attackRange = 15;
+                    _attackTime = 2;
+                    break;
+                }
+            case (TypeOfEnemy.miniBoss):
+                {
+                    _attack = 5;
+                    _health = 10;
+                    _sightRadius = 20;
+                    _attackRadius = 15;
+                    _attackRange = 15;
+                    _attackTime = 2;
+                    break;
+                }
+        }
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.Find("Player").transform;
+        _player = GameObject.Find("Player").transform;
     }
 
     private void Update()
     {
-        inSightRange = Physics.CheckSphere(gameObject.transform.position, sightRange, thePlayer);
-        inSightRange = Physics.CheckSphere(gameObject.transform.position, attackRange, thePlayer);
+        _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
+        _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
 
-        if (inSightRange && !InAttackRange)
-        {
-            Chasing();
-        }
-        if (inSightRange && InAttackRange)
+        if (_inSightRange && _inAttackRange)
         {
             Attacking();
+        }
+        if (_inSightRange && !_inAttackRange)
+        {
+            Chasing();
         }
         else
         {
@@ -49,52 +105,51 @@ public class Enemy_2 : MonoBehaviour
     }
     private void Patrolling()
     {
-        if (!newPatrolPoint)
+        _isAttacking = false;
+
+        if (!_newPatrolPoint)
         {
-            float pointX = Random.Range(-patrolPointRange, patrolPointRange);
-            float pointZ = Random.Range(-patrolPointRange, patrolPointRange);
+            float pointX = Random.Range(-_patrolPointRange, _patrolPointRange);
+            float pointZ = Random.Range(-_patrolPointRange, _patrolPointRange);
 
-            patrolPoint = new Vector3(transform.position.x + pointX, transform.position.y, transform.position.z + pointZ);
+            _patrolPoint = new Vector3(transform.position.x + pointX, transform.position.y, transform.position.z + pointZ);
 
-            if (Physics.Raycast(patrolPoint, -transform.up, 2f, isGround))
+            if (Physics.Raycast(_patrolPoint, -transform.up, 2f, _isGround))
             {
-                newPatrolPoint = true;
+                _newPatrolPoint = true;
             }
         }
 
         else
         {
-            agent.SetDestination(patrolPoint);
-            Vector3 distanceToPatrolPont = transform.position = patrolPoint;
+            agent.SetDestination(_patrolPoint);
+            Vector3 distanceToPatrolPont = transform.position = _patrolPoint;
 
             if (distanceToPatrolPont.magnitude < 1f)
             {
-                newPatrolPoint = false;
+                _newPatrolPoint = false;
             }
         }
     }
 
     private void Chasing()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(_player.position);
     }
 
     private void Attacking()
     {
         agent.SetDestination(transform.position);
+        _isAttacking = true;
 
-        if (!isAttacking)
+        while (_isAttacking)
         {
-            isAttacking = true;
-            
+            RaycastHit hit;
+            Physics.Raycast(transform.position, transform.forward, out hit, _attackRange);
+            Debug.DrawRay(transform.position, transform.forward * _attackRange);
+
+            new WaitForSeconds(_attackTime);  
         }
     }
-
-    private IEnumerator ResetAttack()
-    {
-        isAttacking = false;
-        yield retrun new WaitForSeconds(attackTime);
-    }
-
 
 }
