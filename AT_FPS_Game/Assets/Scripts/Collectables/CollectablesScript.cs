@@ -13,13 +13,11 @@ enum Collectables
     healthWeak,
     healthStrong,
     armorWeak,
-    armorStrong,
-    keycard
+    armorStrong
 }
 public class CollectablesScript : MonoBehaviour
 {
     [SerializeField] private Collectables _collect;
-    //public static bool _access;
     private string _type;
 
     private void OnTriggerEnter(Collider other)
@@ -32,45 +30,38 @@ public class CollectablesScript : MonoBehaviour
                     {
                         _type = "Pistol";
                         AmmoUI.ammo += 30;
-                        AmmoUI.ammoLeft = true;
-                        MagUI.mag += 10;
+                        ShootingScript.damage = 1;
                         break;
                     }
                 case Collectables.pistolAmmo:
                     {
                         _type = "Pistol Ammo";
                         AmmoUI.ammo += 10;
-                        AmmoUI.ammoLeft = true;
                         break;
                     }
                 case Collectables.bigGun:
                     {
                         _type = "Big gun";
                         AmmoUI.ammo += 24;
-                        AmmoUI.ammoLeft = true;
-                        MagUI.mag += 6;
+                        ShootingScript.damage = 3;
                         break;
                     }
                 case Collectables.biggunAmmo:
                     {
                         _type = "Big gun Ammo";
                         AmmoUI.ammo += 6;
-                        AmmoUI.ammoLeft = true;
                         break;
                     }
                 case Collectables.grenade:
                     {
                         _type = "Grenade";
                         AmmoUI.ammo += 5;
-                        AmmoUI.ammoLeft = true;
-                        MagUI.mag += 1;
                         break;
                     }
                 case Collectables.grenadeAmmo:
                     {
                         _type = "Grenade Ammo";
                         AmmoUI.ammo += 1;
-                        AmmoUI.ammoLeft = true;
                         break;
                     }
                 case Collectables.healthWeak:
@@ -97,21 +88,9 @@ public class CollectablesScript : MonoBehaviour
                         ArmorUI.armor += 50;
                         break;
                     }
-                case Collectables.keycard:
-                    {
-                        _type = "Key card";
-                        //_access = true;
-                        break;
-                    }
             }
             Debug.Log("You have collected a " + _type);
-            StartCoroutine(Collected());
+            Destroy(gameObject);
         }
-    }
-    private IEnumerator Collected()
-    {
-        gameObject.SetActive(false);
-        yield return new WaitForSeconds(2);
-        Destroy(gameObject);
     }
 }

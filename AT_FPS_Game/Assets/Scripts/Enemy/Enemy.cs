@@ -80,12 +80,13 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        /*if (_patrolling)
+        if (_patrolling)
         {
             StartCoroutine(PatrollingFuction());
-        }*/
+        }
         if (_attacking)
         {
+            _patrolling = false;
             StartCoroutine(AttackingFunction());
         }
         if (_health <= 0)
@@ -98,7 +99,6 @@ public class Enemy : MonoBehaviour
     {
         while(_patrolling)
         {
-
             if (gameObject.transform.position == _patrolPoint1.position)
             {
                 _timer = float.Epsilon;
@@ -111,7 +111,6 @@ public class Enemy : MonoBehaviour
                     yield return new WaitForFixedUpdate();
                 }
             }
-
             if (gameObject.transform.position == _patrolPoint2.position)
             {
                 _timer = float.Epsilon;

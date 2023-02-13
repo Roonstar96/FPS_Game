@@ -7,7 +7,7 @@ public class ShootingScript : MonoBehaviour
     [Header("Shooting settings")]
     [SerializeField] private Transform _transform;
     [SerializeField] private int _weaponRange;
-    public int damage;
+    public static int damage;
 
     void Update()
     {
@@ -36,12 +36,10 @@ public class ShootingScript : MonoBehaviour
             if (hit.collider.tag == "Enemy")
             {
                 Debug.Log("You hit an enemy!");
-                hit.collider.gameObject.GetComponent<Enemy>()._health -= 1;
+                
+                var enemy = hit.collider.gameObject.GetComponent<Enemy_2>()._health;
+                DamageEnemy(enemy);
             }
-            //raycast stuff here
-
-                //GameObject bullet = (GameObject)Instantiate(projectile, weapon.transform.position, Quaternion.identity);
-                //bullet.gameObject.GetComponent<Rigidbody>().velocity = playerRotation.transform.forward * 50;
         }
     }
 
@@ -54,9 +52,9 @@ public class ShootingScript : MonoBehaviour
     {
 
     }
-    private void DamageEnemy()
+    private void DamageEnemy(int enemyHealth)
     {
+        enemyHealth -= damage;
         //add code to reduce enemy health by damage variable
-
     }
 }

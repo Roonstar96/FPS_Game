@@ -45,8 +45,8 @@ public class Enemy_2 : MonoBehaviour
                     _attack = 1;
                     _health = 3;
                     _sightRadius = 20;
-                    _attackRadius = 15;
-                    _attackRange = 15;
+                    _attackRadius = 10;
+                    _attackRange = 12;
                     _attackTime = 2;
                     break;
                 }
@@ -54,8 +54,8 @@ public class Enemy_2 : MonoBehaviour
                 {
                     _attack = 2;
                     _health = 4;
-                    _sightRadius = 20;
-                    _attackRadius = 15;
+                    _sightRadius = 15;
+                    _attackRadius = 10;
                     _attackRange = 15;
                     _attackTime = 2;
                     break;
@@ -64,9 +64,9 @@ public class Enemy_2 : MonoBehaviour
                 {
                     _attack = 3;
                     _health = 5;
-                    _sightRadius = 20;
-                    _attackRadius = 15;
-                    _attackRange = 15;
+                    _sightRadius = 10;
+                    _attackRadius = 10;
+                    _attackRange = 10;
                     _attackTime = 2;
                     break;
                 }
@@ -74,21 +74,29 @@ public class Enemy_2 : MonoBehaviour
                 {
                     _attack = 5;
                     _health = 10;
-                    _sightRadius = 20;
-                    _attackRadius = 15;
+                    _sightRadius = 30;
+                    _attackRadius = 20;
                     _attackRange = 15;
                     _attackTime = 2;
                     break;
                 }
         }
+
         agent = GetComponent<NavMeshAgent>();
         _player = GameObject.Find("Player").transform;
+
+        //Gizmos.color
     }
 
     private void Update()
     {
         _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
         _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
+
+        if(_health <= 0 )
+        {
+            Dying();
+        }
 
         if (_inSightRange && _inAttackRange)
         {
@@ -100,13 +108,13 @@ public class Enemy_2 : MonoBehaviour
         }
         else
         {
+            _isAttacking = false;
             Patrolling();
         }
+
     }
     private void Patrolling()
     {
-        _isAttacking = false;
-
         if (!_newPatrolPoint)
         {
             float pointX = Random.Range(-_patrolPointRange, _patrolPointRange);
@@ -123,7 +131,7 @@ public class Enemy_2 : MonoBehaviour
         else
         {
             agent.SetDestination(_patrolPoint);
-            Vector3 distanceToPatrolPont = transform.position = _patrolPoint;
+            Vector3 distanceToPatrolPont = transform.position - _patrolPoint;
 
             if (distanceToPatrolPont.magnitude < 1f)
             {
@@ -137,19 +145,30 @@ public class Enemy_2 : MonoBehaviour
         agent.SetDestination(_player.position);
     }
 
-    private void Attacking()
+    private IEnumerator Attacking()
     {
         agent.SetDestination(transform.position);
-        _isAttacking = true;
 
-        while (_isAttacking)
+        if(!_isAttacking)
         {
             RaycastHit hit;
             Physics.Raycast(transform.position, transform.forward, out hit, _attackRange);
             Debug.DrawRay(transform.position, transform.forward * _attackRange);
-
-            new WaitForSeconds(_attackTime);  
+            _isAttacking = true;
         }
-    }
 
+        yield return new WaitForSeconds(_attackTime);
+        _isAttacking = false;
+    }
+    private void Dying()
+    {
+        Destroy(gameObject);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _attackRadius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _sightRadius);
+    }
 }

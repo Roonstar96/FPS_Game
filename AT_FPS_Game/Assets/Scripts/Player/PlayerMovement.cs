@@ -15,6 +15,11 @@ public class PlayerMovement : MonoBehaviour
     private float moveZ;
     private Vector3 moveChar;
 
+    public static bool _greenCard;
+    public static bool _redCard;
+    public static bool _blueCard;
+    public static bool _blackCard;
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
