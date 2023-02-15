@@ -26,6 +26,7 @@ public class Enemy_2 : MonoBehaviour
     [SerializeField] private Vector3 _patrolPoint;
     [SerializeField] private float _patrolPointRange;
     [SerializeField] private float _sightRadius, _attackRadius;
+    [SerializeField] private bool _isPatroling;
     [SerializeField] private bool _newPatrolPoint;
     [SerializeField] private bool _inSightRange;
 
@@ -84,7 +85,7 @@ public class Enemy_2 : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         _player = GameObject.Find("Player").transform;
-
+        _isPatroling = true;
         //Gizmos.color
     }
 
@@ -97,10 +98,13 @@ public class Enemy_2 : MonoBehaviour
         {
             Dying();
         }
-
+        if (_isPatroling)
+        {
+            Patrolling();
+        }
         if (_inSightRange && _inAttackRange)
         {
-            Attacking();
+            StartCoroutine(Attacking());
         }
         if (_inSightRange && !_inAttackRange)
         {
@@ -108,8 +112,9 @@ public class Enemy_2 : MonoBehaviour
         }
         else
         {
-            _isAttacking = false;
-            Patrolling();
+            StopAllCoroutines();
+            _isPatroling = true;
+            //_isAttacking = false;
         }
 
     }
@@ -147,23 +152,45 @@ public class Enemy_2 : MonoBehaviour
 
     private IEnumerator Attacking()
     {
+        _isPatroling = true;
         agent.SetDestination(transform.position);
 
-        if(!_isAttacking)
+        RaycastHit hit;
+        Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
+        Debug.DrawRay(transform.position, -transform.forward * _attackRange);
+
+        if (hit.collider.tag == "Player")
         {
-            RaycastHit hit;
-            Physics.Raycast(transform.position, transform.forward, out hit, _attackRange);
-            Debug.DrawRay(transform.position, transform.forward * _attackRange);
-            _isAttacking = true;
+            Debug.Log("An enemy has hit you!");
+            DamagePlayer();
         }
 
         yield return new WaitForSeconds(_attackTime);
-        _isAttacking = false;
+        ResetAttack();
     }
+
+    private void ResetAttack()
+    {
+        StartCoroutine(Attacking());
+    }
+
+    private void DamagePlayer()
+    {
+        if(PlayerStatus.hasArmor)
+        {
+            PlayerStatus.armor -= _attack;
+        }
+        else
+        {
+            PlayerStatus.health -= _attack;
+        }
+    }
+
     private void Dying()
     {
         Destroy(gameObject);
     }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

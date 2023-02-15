@@ -19,10 +19,10 @@ public class ShootingScript : MonoBehaviour
 
     private void Shooting()
     {
-        if (AmmoUI.ammo > 0)
+        if (PlayerStatus.ammo > 0)
         {
             Debug.Log("BANG!");
-            AmmoUI.ammo -= 1;
+            PlayerStatus.ammo -= 1;
 
             RaycastHit hit;
             Physics.Raycast(_transform.position, _transform.forward, out hit, _weaponRange);
