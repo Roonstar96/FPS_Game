@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 enum Collectables
 {
     pistol,
     pistolAmmo,
+    shotGun,
+    shotgunAmmo,
     bigGun,
     biggunAmmo,
-    grenade,
-    grenadeAmmo,
     healthWeak,
     healthStrong,
     armorWeak,
@@ -18,7 +19,18 @@ enum Collectables
 public class CollectablesScript : MonoBehaviour
 {
     [SerializeField] private Collectables _collect;
+    [SerializeField] private PlayerStatus _playerStat;
+    [SerializeField] private WeaponManager _weaponMan;
+    //[SerializeField] private Canvas _canvas;
+
     private string _type;
+
+    private void Awake()
+    {
+        _playerStat = GameObject.Find("Player").GetComponent<PlayerStatus>();
+        _weaponMan = GameObject.Find("Player").GetComponent<WeaponManager>();
+        //_canvas = Canvas.;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -29,65 +41,64 @@ public class CollectablesScript : MonoBehaviour
                 case Collectables.pistol:
                     {
                         _type = "Pistol";
-                        PlayerStatus.ammo += 30;
-                        ShootingScript.damage = 1;
+                        _weaponMan.PistolAmmo += 45;
+                        _weaponMan._hasPistol = true;
                         break;
                     }
                 case Collectables.pistolAmmo:
                     {
                         _type = "Pistol Ammo";
-                        PlayerStatus.ammo += 10;
+                        _weaponMan.PistolAmmo += 15;
+                        break;
+                    }
+                case Collectables.shotGun:
+                    {
+                        _type = "Shotgun";
+                        _weaponMan.ShotgunAmmo += 30;
+                        _weaponMan._hasShotgun = true;
+                        break;
+                    }
+                case Collectables.shotgunAmmo:
+                    {
+                        _type = "Shotgun Ammo";
+                        _weaponMan.ShotgunAmmo += 8;
                         break;
                     }
                 case Collectables.bigGun:
                     {
                         _type = "Big gun";
-                        PlayerStatus.ammo += 24;
-                        ShootingScript.damage = 3;
+                        _weaponMan.BigGunAmmo += 20;
+                        _weaponMan._hasBigGun = true;
                         break;
                     }
                 case Collectables.biggunAmmo:
                     {
                         _type = "Big gun Ammo";
-                        PlayerStatus.ammo += 6;
-                        break;
-                    }
-                case Collectables.grenade:
-                    {
-                        _type = "Grenade";
-                        PlayerStatus.ammo += 5;
-                        break;
-                    }
-                case Collectables.grenadeAmmo:
-                    {
-                        _type = "Grenade Ammo";
-                        PlayerStatus.ammo += 1;
+                        _weaponMan.BigGunAmmo += 5;
                         break;
                     }
                 case Collectables.healthWeak:
                     {
                         _type = "Small Health pack";
-                        PlayerStatus.health += 25;
+                        _playerStat.Health += 25;
                         break;
                     }
                 case Collectables.healthStrong:
                     {
                         _type = "Large Health pack";
-                        PlayerStatus.health += 50;
+                        _playerStat.Health += 50;
                         break;
                     }
                 case Collectables.armorWeak:
                     {
                         _type = "Weak armor";
-                        PlayerStatus.armor += 25;
-                        PlayerStatus.hasArmor = true;
+                        _playerStat.Armor += 25;
                         break;
                     }
                 case Collectables.armorStrong:
                     {
                         _type = "Strong armor";
-                        PlayerStatus.armor += 50;
-                        PlayerStatus.hasArmor = true;
+                        _playerStat.Armor += 50;
                         break;
                     }
             }

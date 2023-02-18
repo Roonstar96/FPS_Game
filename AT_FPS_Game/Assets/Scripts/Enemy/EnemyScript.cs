@@ -10,12 +10,12 @@ enum TypeOfEnemy
     heavy,
     miniBoss
 }
-public class Enemy_2 : MonoBehaviour
+public class EnemyScript : MonoBehaviour
 {
     [Header("Basic settings")]
     [SerializeField] private TypeOfEnemy _enemyType;
     [SerializeField] private int _attack;
-    public int _health;
+    [SerializeField] private int _health;
 
     [Header("AI Variables")]
     public NavMeshAgent agent;
@@ -31,11 +31,13 @@ public class Enemy_2 : MonoBehaviour
     [SerializeField] private bool _inSightRange;
 
     [Header("Attack Settings")]
-    [SerializeField] private int _attackRange; 
+    [SerializeField] private int _attackRange;
     [SerializeField] private float _attackTime;
     [SerializeField] private bool _inAttackRange;
     [SerializeField] private bool _isAttacking;
+    [SerializeField] private PlayerStatus _playerStat;
 
+    public int EnemyHealth { get => _health; set => _health = value; }
 
     private void Awake()
     {
@@ -43,50 +45,50 @@ public class Enemy_2 : MonoBehaviour
         {
             case (TypeOfEnemy.regular):
                 {
-                    _attack = 1;
-                    _health = 3;
-                    _sightRadius = 20;
-                    _attackRadius = 10;
-                    _attackRange = 12;
+                    _attack = 3;
+                    _health = 10;
+                    _sightRadius = 30;
+                    _attackRadius = 20;
+                    _attackRange = 22;
                     _attackTime = 2;
                     break;
                 }
             case (TypeOfEnemy.medium):
                 {
-                    _attack = 2;
-                    _health = 4;
-                    _sightRadius = 15;
-                    _attackRadius = 10;
-                    _attackRange = 15;
-                    _attackTime = 2;
+                    _attack = 4;
+                    _health = 15;
+                    _sightRadius = 25;
+                    _attackRadius = 15;
+                    _attackRange = 17;
+                    _attackTime = 2.5f;
                     break;
                 }
             case (TypeOfEnemy.heavy):
                 {
-                    _attack = 3;
-                    _health = 5;
-                    _sightRadius = 10;
-                    _attackRadius = 10;
-                    _attackRange = 10;
-                    _attackTime = 2;
+                    _attack = 5;
+                    _health = 20;
+                    _sightRadius = 20;
+                    _attackRadius = 15;
+                    _attackRange = 17;
+                    _attackTime = 3;
                     break;
                 }
             case (TypeOfEnemy.miniBoss):
                 {
-                    _attack = 5;
-                    _health = 10;
-                    _sightRadius = 30;
-                    _attackRadius = 20;
-                    _attackRange = 15;
-                    _attackTime = 2;
+                    _attack = 10;
+                    _health = 50;
+                    _sightRadius = 35;
+                    _attackRadius = 25;
+                    _attackRange = 27;
+                    _attackTime = 5;
                     break;
                 }
         }
 
         agent = GetComponent<NavMeshAgent>();
         _player = GameObject.Find("Player").transform;
-        _isPatroling = true;
-        //Gizmos.color
+        _playerStat = GameObject.Find("Player").GetComponent<PlayerStatus>();
+        _newPatrolPoint = false;
     }
 
     private void Update()
@@ -94,17 +96,15 @@ public class Enemy_2 : MonoBehaviour
         _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
         _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
 
-        if(_health <= 0 )
+        Patrolling();
+
+        if (_health <= 0)
         {
             Dying();
         }
-        if (_isPatroling)
-        {
-            Patrolling();
-        }
         if (_inSightRange && _inAttackRange)
         {
-            StartCoroutine(Attacking());
+            Attacking();
         }
         if (_inSightRange && !_inAttackRange)
         {
@@ -113,11 +113,9 @@ public class Enemy_2 : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            _isPatroling = true;
-            //_isAttacking = false;
         }
-
     }
+
     private void Patrolling()
     {
         if (!_newPatrolPoint)
@@ -133,7 +131,7 @@ public class Enemy_2 : MonoBehaviour
             }
         }
 
-        else
+        else if (_newPatrolPoint)
         {
             agent.SetDestination(_patrolPoint);
             Vector3 distanceToPatrolPont = transform.position - _patrolPoint;
@@ -150,11 +148,12 @@ public class Enemy_2 : MonoBehaviour
         agent.SetDestination(_player.position);
     }
 
-    private IEnumerator Attacking()
+    private void Attacking()
     {
-        _isPatroling = true;
         agent.SetDestination(transform.position);
 
+
+        _isAttacking = true;
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
         Debug.DrawRay(transform.position, -transform.forward * _attackRange);
@@ -163,26 +162,29 @@ public class Enemy_2 : MonoBehaviour
         {
             Debug.Log("An enemy has hit you!");
             DamagePlayer();
+            //ResetAttack();
         }
-
-        yield return new WaitForSeconds(_attackTime);
-        ResetAttack();
+    
+        //ResetAttack();
     }
 
     private void ResetAttack()
     {
-        StartCoroutine(Attacking());
+        _isAttacking = false;
+        new WaitForSeconds(_attackTime);
+
+        Attacking();
     }
 
     private void DamagePlayer()
     {
         if(PlayerStatus.hasArmor)
         {
-            PlayerStatus.armor -= _attack;
+            _playerStat.Armor -= _attack;
         }
         else
         {
-            PlayerStatus.health -= _attack;
+            _playerStat.Health -= _attack;
         }
     }
 

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    public static int health;
-    public static int armor;
-    public static int ammo;
+    [SerializeField] private int _health;
+    [SerializeField] private int _armor;
+    [SerializeField] private WeaponManager _weapons;
 
     public static bool hasArmor;
 
@@ -14,12 +14,13 @@ public class PlayerStatus : MonoBehaviour
     private int _armorMax;
     private int _ammoMax;
 
+    public int Health { get => _health; set => _health = value; }
+    public int Armor { get => _armor; set => _armor = value; }
 
     private void Awake()
     {
-        health = 100;
-        armor = 0;
-        ammo = 0;
+        _health = 100;
+        _armor = 0;
 
         hasArmor = false;
 
@@ -32,51 +33,40 @@ public class PlayerStatus : MonoBehaviour
     {
         UpdateHealth();
         UpdateArmor();
-        UpdateAmmo();
     }
 
     private void UpdateHealth()
     {
-        if (health <= 0)
+
+        if (_health <= 0)
         {
-            //Add game over stuff here
+            GameOver();
         }
-        else if (health > _healthMax)
+        else if (_health > _healthMax)
         {
-            health = _healthMax;
+            _health = _healthMax;
         }
     }
 
     private void UpdateArmor()
     {
-        if (hasArmor)
+        if (_armor > 0)
         {
-            if (armor <= 0)
-            {
-                armor = 0;
-                hasArmor = false;
-            }
-
-            else if (armor > _armorMax)
-            {
-                armor = _armorMax;
-            }
+            hasArmor = true;
         }
-        else
+        else if (_armor <= 0)
         {
-            return;
+            _armor = 0;
+            hasArmor = false;
         }
+        else if (_armor > _armorMax)
+        {
+            _armor = _armorMax;
+        }   
     }
-    private void UpdateAmmo()
+
+    private void GameOver()
     {
-        if (ammo <= 0)
-        {
-            ammo = 0;
-        }
-        else if (ammo > _ammoMax)
-        {
-            ammo = _ammoMax;
-        }
+        //Load game over scene here
     }
-
 }
