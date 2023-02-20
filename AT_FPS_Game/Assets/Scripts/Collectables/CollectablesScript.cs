@@ -92,13 +92,13 @@ public class CollectablesScript : MonoBehaviour
                 case Collectables.armorWeak:
                     {
                         _type = "Weak armor";
-                        _playerStat.Armor += 25;
+                        _playerStat.Armour += 25;
                         break;
                     }
                 case Collectables.armorStrong:
                     {
                         _type = "Strong armor";
-                        _playerStat.Armor += 50;
+                        _playerStat.Armour += 50;
                         break;
                     }
             }

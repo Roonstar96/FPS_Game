@@ -5,24 +5,24 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     [SerializeField] private int _health;
-    [SerializeField] private int _armor;
+    [SerializeField] private int _armour;
     [SerializeField] private WeaponManager _weapons;
 
-    public static bool hasArmor;
+    public static bool _hasArmour;
 
     private int _healthMax;
     private int _armorMax;
     private int _ammoMax;
 
     public int Health { get => _health; set => _health = value; }
-    public int Armor { get => _armor; set => _armor = value; }
+    public int Armour { get => _armour; set => _armour = value; }
 
     private void Awake()
     {
         _health = 100;
-        _armor = 0;
+        _armour = 0;
 
-        hasArmor = false;
+        _hasArmour = false;
 
         _healthMax = 100;
         _armorMax = 100;
@@ -50,18 +50,18 @@ public class PlayerStatus : MonoBehaviour
 
     private void UpdateArmor()
     {
-        if (_armor > 0)
+        if (_armour > 0)
         {
-            hasArmor = true;
+            _hasArmour = true;
         }
-        else if (_armor <= 0)
+        else if (_armour <= 0)
         {
-            _armor = 0;
-            hasArmor = false;
+            _armour = 0;
+            _hasArmour = false;
         }
-        else if (_armor > _armorMax)
+        else if (_armour > _armorMax)
         {
-            _armor = _armorMax;
+            _armour = _armorMax;
         }   
     }
 

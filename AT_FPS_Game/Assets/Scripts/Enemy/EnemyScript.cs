@@ -37,6 +37,13 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private bool _isAttacking;
     [SerializeField] private PlayerStatus _playerStat;
 
+    [Header("Item Drops")]
+    [SerializeField] private GameObject _itemDrop;
+    [SerializeField] private GameObject _pistolAmmo;
+    [SerializeField] private GameObject _shotgunAmmo;
+    [SerializeField] private GameObject _biggunAmmo;
+    [SerializeField] private GameObject _keyCard;
+
     public int EnemyHealth { get => _health; set => _health = value; }
 
     private void Awake()
@@ -51,6 +58,7 @@ public class EnemyScript : MonoBehaviour
                     _attackRadius = 20;
                     _attackRange = 22;
                     _attackTime = 2;
+                    _itemDrop = _pistolAmmo;
                     break;
                 }
             case (TypeOfEnemy.medium):
@@ -61,6 +69,7 @@ public class EnemyScript : MonoBehaviour
                     _attackRadius = 15;
                     _attackRange = 17;
                     _attackTime = 2.5f;
+                    _itemDrop = _shotgunAmmo;
                     break;
                 }
             case (TypeOfEnemy.heavy):
@@ -71,6 +80,7 @@ public class EnemyScript : MonoBehaviour
                     _attackRadius = 15;
                     _attackRange = 17;
                     _attackTime = 3;
+                    _itemDrop = _biggunAmmo;
                     break;
                 }
             case (TypeOfEnemy.miniBoss):
@@ -81,6 +91,7 @@ public class EnemyScript : MonoBehaviour
                     _attackRadius = 25;
                     _attackRange = 27;
                     _attackTime = 5;
+                    _itemDrop = _keyCard;
                     break;
                 }
         }
@@ -94,7 +105,7 @@ public class EnemyScript : MonoBehaviour
     private void Update()
     {
         _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
-        _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
+        //_inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
 
         Patrolling();
 
@@ -102,11 +113,11 @@ public class EnemyScript : MonoBehaviour
         {
             Dying();
         }
-        if (_inSightRange && _inAttackRange)
+        /*if (_inSightRange && _inAttackRange)
         {
-            Attacking();
-        }
-        if (_inSightRange && !_inAttackRange)
+            StartCoroutine(Attacking());
+        }*/
+        if (_inSightRange)
         {
             Chasing();
         }
@@ -130,7 +141,6 @@ public class EnemyScript : MonoBehaviour
                 _newPatrolPoint = true;
             }
         }
-
         else if (_newPatrolPoint)
         {
             agent.SetDestination(_patrolPoint);
@@ -145,14 +155,22 @@ public class EnemyScript : MonoBehaviour
 
     private void Chasing()
     {
-        agent.SetDestination(_player.position);
+        _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
+
+        if (_inAttackRange)
+        {
+            StartCoroutine(Attacking());
+        }
+        else
+        {
+            agent.SetDestination(_player.position);
+        }
     }
 
-    private void Attacking()
+    private IEnumerator Attacking()
     {
         agent.SetDestination(transform.position);
-
-
+        //yield return new WaitForSeconds(_attackTime);
         _isAttacking = true;
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
@@ -162,10 +180,14 @@ public class EnemyScript : MonoBehaviour
         {
             Debug.Log("An enemy has hit you!");
             DamagePlayer();
-            //ResetAttack();
+            yield return null;
         }
-    
-        //ResetAttack();
+        else
+        {
+            yield return null;
+        }
+        ResetAttack();
+        yield return null;
     }
 
     private void ResetAttack()
@@ -173,14 +195,14 @@ public class EnemyScript : MonoBehaviour
         _isAttacking = false;
         new WaitForSeconds(_attackTime);
 
-        Attacking();
+        StartCoroutine(Attacking());
     }
 
     private void DamagePlayer()
     {
-        if(PlayerStatus.hasArmor)
+        if(PlayerStatus._hasArmour)
         {
-            _playerStat.Armor -= _attack;
+            _playerStat.Armour -= _attack;
         }
         else
         {
@@ -190,6 +212,8 @@ public class EnemyScript : MonoBehaviour
 
     private void Dying()
     {
+        //Add code for item dropping
+        //Add a changce factor for regular enemies and the keycard a definite action for the mini boss
         Destroy(gameObject);
     }
 
