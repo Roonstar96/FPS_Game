@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 enum TypeOfEnemy
 {
@@ -16,6 +17,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private TypeOfEnemy _enemyType;
     [SerializeField] private int _attack;
     [SerializeField] private int _health;
+    [SerializeField] private bool _isMiniBoss;
 
     [Header("AI Variables")]
     public NavMeshAgent agent;
@@ -35,16 +37,22 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float _attackTime;
     [SerializeField] private bool _inAttackRange;
     [SerializeField] private bool _isAttacking;
+    [SerializeField] private GameObject _projectile;
     [SerializeField] private PlayerStatus _playerStat;
 
     [Header("Item Drops")]
+    [SerializeField] private int _itemdropChance;
     [SerializeField] private GameObject _itemDrop;
     [SerializeField] private GameObject _pistolAmmo;
     [SerializeField] private GameObject _shotgunAmmo;
     [SerializeField] private GameObject _biggunAmmo;
     [SerializeField] private GameObject _keyCard;
 
+    public delegate void AttackEvent();
+    public static event AttackEvent attackEvent;
+
     public int EnemyHealth { get => _health; set => _health = value; }
+
 
     private void Awake()
     {
@@ -54,10 +62,14 @@ public class EnemyScript : MonoBehaviour
                 {
                     _attack = 3;
                     _health = 10;
+                    _isMiniBoss = false;
+
                     _sightRadius = 30;
                     _attackRadius = 20;
                     _attackRange = 22;
                     _attackTime = 2;
+
+                    _itemdropChance = 5;
                     _itemDrop = _pistolAmmo;
                     break;
                 }
@@ -65,10 +77,14 @@ public class EnemyScript : MonoBehaviour
                 {
                     _attack = 4;
                     _health = 15;
+                    _isMiniBoss = false;
+
                     _sightRadius = 25;
                     _attackRadius = 15;
                     _attackRange = 17;
                     _attackTime = 2.5f;
+
+                    _itemdropChance = 5;
                     _itemDrop = _shotgunAmmo;
                     break;
                 }
@@ -76,10 +92,14 @@ public class EnemyScript : MonoBehaviour
                 {
                     _attack = 5;
                     _health = 20;
+                    _isMiniBoss = false;
+
                     _sightRadius = 20;
                     _attackRadius = 15;
                     _attackRange = 17;
                     _attackTime = 3;
+
+                    _itemdropChance = 5;
                     _itemDrop = _biggunAmmo;
                     break;
                 }
@@ -87,10 +107,14 @@ public class EnemyScript : MonoBehaviour
                 {
                     _attack = 10;
                     _health = 50;
+                    _isMiniBoss = true;
+
                     _sightRadius = 35;
                     _attackRadius = 25;
                     _attackRange = 27;
                     _attackTime = 5;
+
+                    _itemdropChance = 5;
                     _itemDrop = _keyCard;
                     break;
                 }
@@ -100,30 +124,42 @@ public class EnemyScript : MonoBehaviour
         _player = GameObject.Find("Player").transform;
         _playerStat = GameObject.Find("Player").GetComponent<PlayerStatus>();
         _newPatrolPoint = false;
+        _isAttacking = false;
+    }
+
+    private void OnEnable()
+    {
+        EnemyScript.attackEvent += Attacking;
+    }
+
+    private void OnDisable()
+    {
+        EnemyScript.attackEvent -= Attacking;
     }
 
     private void Update()
     {
         _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
-        //_inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
+        _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
 
         Patrolling();
+        //StartCoroutine(Attacking());
 
         if (_health <= 0)
         {
             Dying();
         }
-        /*if (_inSightRange && _inAttackRange)
+        if (_inSightRange && !_inAttackRange)
         {
-            StartCoroutine(Attacking());
-        }*/
-        if (_inSightRange)
-        {
+            //_isAttacking = false;
             Chasing();
         }
-        else
+        else if (_inSightRange && _inAttackRange)
         {
-            StopAllCoroutines();
+            //StartCoroutine(ResetAttack());
+            //Attacking();
+            //_isAttacking = true;
+            attackEvent();
         }
     }
 
@@ -155,47 +191,39 @@ public class EnemyScript : MonoBehaviour
 
     private void Chasing()
     {
-        _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
-
-        if (_inAttackRange)
-        {
-            StartCoroutine(Attacking());
-        }
-        else
-        {
-            agent.SetDestination(_player.position);
-        }
+        agent.SetDestination(_player.position);
     }
 
-    private IEnumerator Attacking()
+    private void Attacking()
     {
         agent.SetDestination(transform.position);
-        //yield return new WaitForSeconds(_attackTime);
-        _isAttacking = true;
-        RaycastHit hit;
-        Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
-        Debug.DrawRay(transform.position, -transform.forward * _attackRange);
 
-        if (hit.collider.tag == "Player")
+        if (_isMiniBoss)
         {
-            Debug.Log("An enemy has hit you!");
-            DamagePlayer();
-            yield return null;
+            GameObject gameobj;
+            gameobj = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
+            gameobj.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
+
         }
         else
         {
-            yield return null;
+            RaycastHit hit;
+            Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
+            Debug.DrawRay(transform.position, -transform.forward * _attackRange);
+
+            if (hit.collider.tag == "Player")
+            {
+                Debug.Log("An enemy has hit you!");
+                DamagePlayer();
+            }
         }
-        ResetAttack();
-        yield return null;
+        StartCoroutine(ResetAttack());
     }
 
-    private void ResetAttack()
+    private IEnumerator ResetAttack()
     {
-        _isAttacking = false;
-        new WaitForSeconds(_attackTime);
-
-        StartCoroutine(Attacking());
+        yield return new WaitForSeconds(_attackTime);
+        attackEvent();
     }
 
     private void DamagePlayer()
@@ -214,6 +242,21 @@ public class EnemyScript : MonoBehaviour
     {
         //Add code for item dropping
         //Add a changce factor for regular enemies and the keycard a definite action for the mini boss
+        if (_isMiniBoss)
+        {
+            //play animation, then drop
+            Instantiate(_itemDrop, gameObject.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            int i = Random.Range(0, 10);
+
+            if (i >= _itemdropChance)
+            {
+                Instantiate(_itemDrop, gameObject.transform.position, Quaternion.identity);
+            }
+        }
+
         Destroy(gameObject);
     }
 
