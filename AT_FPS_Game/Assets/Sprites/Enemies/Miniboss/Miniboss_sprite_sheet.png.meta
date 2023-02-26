@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1981c512830ad834db0084d05424c99f
+guid: 0c29e1df84614b841b80f5a891b096ae
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -107,13 +107,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shotgun_spritesheet_0
+      name: Miniboss_sprite_sheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 119
-        height: 151
+        x: 194
+        y: 128
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,20 +121,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 295be892156e96948834372a6f459ecd
-      internalID: -1484384515
+      spriteID: 9f4efba75475e1c4b810318046e20b7a
+      internalID: 938191755
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_spritesheet_1
+      name: Miniboss_sprite_sheet_1
       rect:
         serializedVersion: 2
-        x: 119
-        y: 0
-        width: 119
-        height: 150
+        x: 258
+        y: 128
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +142,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a516a17a55c4d5479adcb6426066ac5
-      internalID: -1654946173
+      spriteID: 41595877a3e13f642ad9bbc974417bc0
+      internalID: -607424525
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_spritesheet_2
+      name: Miniboss_sprite_sheet_2
       rect:
         serializedVersion: 2
-        x: 357
-        y: 0
-        width: 119
-        height: 151
+        x: 130
+        y: 128
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +163,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 31109ac76af1fe841bf230ac30000f35
-      internalID: 555490495
+      spriteID: 370acae3982351d42a9dbab420c3239e
+      internalID: 2128867990
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_spritesheet_3
+      name: Miniboss_sprite_sheet_3
       rect:
         serializedVersion: 2
-        x: 238
-        y: 0
-        width: 119
-        height: 151
+        x: 66
+        y: 128
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 886ecf5afacf4b048ad2bbb88bc59300
-      internalID: -1000072145
+      spriteID: 1338044ad01e98b42a8340614187c4fc
+      internalID: 1158472062
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_spritesheet_4
+      name: Miniboss_sprite_sheet_4
       rect:
         serializedVersion: 2
-        x: 476
-        y: 0
-        width: 119
-        height: 151
+        x: 1
+        y: 128
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,20 +205,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5865df7404685e143968f12d35967925
-      internalID: -529471787
+      spriteID: fdd25714a265f274fb0b12d695cfa7cf
+      internalID: -2031931253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shotgun_spritesheet_5
+      name: Miniboss_sprite_sheet_5
       rect:
         serializedVersion: 2
-        x: 595
-        y: 0
-        width: 119
-        height: 151
+        x: 2
+        y: 64
+        width: 61
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -226,8 +226,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a02f9ef659b5e0143b1787ee56fb5a1f
-      internalID: -537739683
+      spriteID: 9797ef4a78d300b469e6e8b9ba9274c7
+      internalID: -398474601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniboss_sprite_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 64
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54646f2e1060cef499bff9c548aedade
+      internalID: 2127314881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniboss_sprite_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 64
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 302be70400d2d784fa486bb107172b50
+      internalID: -836756940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniboss_sprite_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 64
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28e3621056d9d60478e403f6ccc45704
+      internalID: 882185640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniboss_sprite_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 64
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f866d538174eae347b4c917557e97e16
+      internalID: -492772756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniboss_sprite_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 0
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 852cb67d5b073db46a0bee4a511acfdd
+      internalID: 1738278038
       vertices: []
       indices: 
       edges: []
@@ -235,7 +340,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 2f2797f0a66abac4d9c3331672672a63
+    spriteID: 93905c1efdf38c441a4db88d1811d79d
     internalID: 0
     vertices: []
     indices: 
@@ -243,12 +348,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Shotgun_spritesheet_5: -537739683
-      Shotgun_spritesheet_4: -529471787
-      Shotgun_spritesheet_0: -1484384515
-      Shotgun_spritesheet_1: -1654946173
-      Shotgun_spritesheet_3: -1000072145
-      Shotgun_spritesheet_2: 555490495
+      Miniboss_sprite_sheet_4: -2031931253
+      Miniboss_sprite_sheet_7: -836756940
+      Miniboss_sprite_sheet_6: 2127314881
+      Miniboss_sprite_sheet_2: 2128867990
+      Miniboss_sprite_sheet_5: -398474601
+      Miniboss_sprite_sheet_0: 938191755
+      Miniboss_sprite_sheet_8: 882185640
+      Miniboss_sprite_sheet_1: -607424525
+      Miniboss_sprite_sheet_9: -492772756
+      Miniboss_sprite_sheet_10: 1738278038
+      Miniboss_sprite_sheet_3: 1158472062
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
