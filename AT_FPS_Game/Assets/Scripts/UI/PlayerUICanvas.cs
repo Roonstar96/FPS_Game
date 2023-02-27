@@ -6,9 +6,12 @@ using TMPro;
 public class PlayerUICanvas : MonoBehaviour
 {
     [Header("Weapon UI")]
-    [SerializeField] private GameObject _pistol;
-    [SerializeField] private GameObject _shotgun;
-    [SerializeField] private GameObject _bigGun;
+    [SerializeField] private GameObject _pistolSlot;
+    [SerializeField] private GameObject _shotgunSlot;
+    [SerializeField] private GameObject _bigGunSlot;
+    [SerializeField] private GameObject _pistolImage;
+    [SerializeField] private GameObject _shotgunImage;
+    [SerializeField] private GameObject _biggunImage;
 
 
     [SerializeField] private WeaponManager _weapMan;
@@ -21,21 +24,33 @@ public class PlayerUICanvas : MonoBehaviour
     {
         if (_weapMan.PisEquip)
         {
-            _pistol.SetActive(true);
-            _shotgun.SetActive(false);
-            _bigGun.SetActive(false);
+            _pistolSlot.SetActive(true);
+            _shotgunSlot.SetActive(false);
+            _bigGunSlot.SetActive(false);
+
+            _pistolImage.SetActive(true);
+            _shotgunImage.SetActive(false);
+            _biggunImage.SetActive(false);
         }
         if(_weapMan.ShotEquip)
         {
-            _pistol.SetActive(false);
-            _shotgun.SetActive(true);
-            _bigGun.SetActive(false);
+            _pistolSlot.SetActive(false);
+            _shotgunSlot.SetActive(true);
+            _bigGunSlot.SetActive(false);
+
+            _pistolImage.SetActive(false);
+            _shotgunImage.SetActive(true);
+            _biggunImage.SetActive(false);
         }
         if (_weapMan.BigEquip)
         {
-            _pistol.SetActive(false);
-            _shotgun.SetActive(false);
-            _bigGun.SetActive(true);
+            _pistolSlot.SetActive(false);
+            _shotgunSlot.SetActive(false);
+            _bigGunSlot.SetActive(true);
+
+            _pistolImage.SetActive(false);
+            _shotgunImage.SetActive(false);
+            _biggunImage.SetActive(true);
         }
     }
 }

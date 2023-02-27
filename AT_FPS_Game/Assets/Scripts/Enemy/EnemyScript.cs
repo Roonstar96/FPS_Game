@@ -18,6 +18,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private int _attack;
     [SerializeField] private int _health;
     [SerializeField] private bool _isMiniBoss;
+    [SerializeField] private Animator _animator;
 
     [Header("AI Variables")]
     public NavMeshAgent agent;
@@ -36,13 +37,9 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private int _attackRange;
     [SerializeField] private float _attackTime;
     [SerializeField] private bool _inAttackRange;
-    [SerializeField] private bool _inAttackSphere;
-    //[SerializeField] private bool _isAttacking;
+    [SerializeField] private bool _isAttacking;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private PlayerStatus _playerStat;
-    private int _eventCounter;
-    private int _attackCounter;
-    
 
     [Header("Item Drops")]
     [SerializeField] private int _itemdropChance;
@@ -52,20 +49,10 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private GameObject _biggunAmmo;
     [SerializeField] private GameObject _keyCard;
 
-    public delegate void AttackEvent();
-    public static event AttackEvent attackEvent;
+    //public delegate void AttackEvent();
+    //public static event AttackEvent attackEvent;
 
     public int EnemyHealth { get => _health; set => _health = value; }
-
-    private void OnEnable()
-    {
-        EnemyScript.attackEvent += Attacking;
-    }
-
-    private void OnDisable()
-    {
-        EnemyScript.attackEvent -= Attacking;
-    }
 
     private void Awake()
     {
@@ -131,12 +118,17 @@ public class EnemyScript : MonoBehaviour
                     break;
                 }
         }
-        _eventCounter = 0;
-        _attackCounter = 0;
+        _animator = gameObject.GetComponent<Animator>();
+        _animator.SetBool("IsWalking", true);
+        _animator.SetBool("IsShooting", false);
+        _animator.SetBool("IsDying", false);
+
         agent = GetComponent<NavMeshAgent>();
+        _newPatrolPoint = false;
+
         _player = GameObject.Find("Player").transform;
         _playerStat = GameObject.Find("Player").GetComponent<PlayerStatus>();
-        _newPatrolPoint = false;
+        _isAttacking = false;
     }
 
     private void Update()
@@ -154,23 +146,21 @@ public class EnemyScript : MonoBehaviour
         }
         else if(_inSightRange && _inAttackRange)
         {
-            if (_eventCounter < 1)
+            if (!_isAttacking)
             {
-                attackEvent();
-                _eventCounter = 1;
+                Attacking();
             }
         }
         else
         {
-            _attackCounter = 0;
             Patrolling();
         }
     }
 
     private void Patrolling()
     {
-        _eventCounter = 0;
-        _attackCounter = 0;
+        _animator.SetBool("IsWalking", true);
+        _animator.SetBool("IsShooting", false);
 
         if (!_newPatrolPoint)
         {
@@ -204,73 +194,23 @@ public class EnemyScript : MonoBehaviour
     private void Attacking()
     {
         agent.SetDestination(transform.position);
+        _isAttacking = true;
 
-        if (_isMiniBoss)
-        {
-            for (_attackCounter = 1; _attackCounter > 0; _attackCounter++)
-            {
-                GameObject gameobj;
-                gameobj = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
-                gameobj.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
+        _animator.SetBool("IsWalking", false);
+        _animator.SetBool("IsShooting", true);
 
-                new WaitForSeconds(_attackTime);
-            }
-        }
-        else
-        {
-            for (_attackCounter = 1; _attackCounter > 0; _attackCounter++)
-            {
-                _inAttackSphere = Physics.CheckSphere(gameObject.transform.position, _attackRange, _isPlayer);
-
-                if (_inAttackSphere)
-                {
-                    Debug.Log("An enemy has hit you!");
-                    DamagePlayer();
-                }
-                else
-                {
-                    Debug.Log("The enemy missed!");
-                }
-
-                new WaitForSeconds(0.2f);
-                _inAttackSphere = Physics.CheckSphere(gameObject.transform.position, 0, _isPlayer);
-
-                new WaitForSeconds(_attackTime);
-            }
-        }
-    }
-
-    /*private void Attacking()
-    {
         if (_isMiniBoss)
         {
             GameObject gameobj;
             gameobj = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
             gameobj.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
 
-            yield return new WaitForSeconds(0.1f);
+            new WaitForSeconds(0.1f);
             gameobj = null;
-
-            yield return new WaitForSeconds(_attackTime);
-
+            StartCoroutine(ResetAttack());
         }
         else
         {
-            _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
-            if (_inAttackSphere)
-            {
-                Debug.Log("An enemy has hit you!");
-                DamagePlayer();
-            }
-
-            yield return new WaitForSeconds(0.1f);
-            _inAttackRange = Physics.CheckSphere(gameObject.transform.position, 0, _isPlayer);
-
-            yield return new WaitForSeconds(_attackTime);
-
-
-
-
             RaycastHit hit;
             Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
             Debug.DrawRay(transform.position, -transform.forward * _attackRange);
@@ -279,15 +219,19 @@ public class EnemyScript : MonoBehaviour
             {
                 Debug.Log("An enemy has hit you!");
                 DamagePlayer();
+                //StartCoroutine(ResetAttack());
             }
-            else
-            {
-                Debug.Log("The Enemy Missed!");
-            }
+
+            _animator.SetBool("IsShooting", false);
+            StartCoroutine(ResetAttack());
         }
-    }*/
+    }
 
-
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(_attackTime);
+        _isAttacking = false;
+    }
 
     private void DamagePlayer()
     {
@@ -301,16 +245,13 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    private void TakeDamage()
-    {
-        //Does an animation when hit
-    }
-
     private void Dying()
     {
+        _animator.SetBool("IsDying", true);
+        new WaitForSeconds(0.8f);
+
         if (_isMiniBoss)
         {
-            //play animation, then drop
             Instantiate(_itemDrop, gameObject.transform.position, Quaternion.identity);
         }
         else
@@ -322,7 +263,6 @@ public class EnemyScript : MonoBehaviour
                 Instantiate(_itemDrop, gameObject.transform.position, Quaternion.identity);
             }
         }
-
         Destroy(gameObject);
     }
 
@@ -332,7 +272,9 @@ public class EnemyScript : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, _attackRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _sightRadius);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, _attackRange);
+
+
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawWireSphere(transform.position, _attackRange);
     }
 }

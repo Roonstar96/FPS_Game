@@ -12,6 +12,10 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private int _currentAmmo;
     [SerializeField] private int _weaponRange;
     [SerializeField] private int _damage;
+    [SerializeField] private Animator _pisAnimator;
+    [SerializeField] private Animator _shotAnimator;
+    [SerializeField] private Animator _bigAnimator;
+    [SerializeField] private Animator _currentAnimator;
 
     [Header("Weapon Booleans")]
     [SerializeField] private bool _pistolEquiped;
@@ -20,10 +24,14 @@ public class WeaponManager : MonoBehaviour
     public bool _hasPistol;
     public bool _hasShotgun;
     public bool _hasBigGun;
+    public bool _isShooting;
     
     [Header("Shooting settings")]
     [SerializeField] private Transform _transform;
     [SerializeField] private PlayerStatus _playerStat;
+
+    [Header("Canvas Objects")]
+    [SerializeField] private Canvas _pistol;
 
     public int CurrentAmmo { get => _currentAmmo; set => _currentAmmo = value; }
     public int PistolAmmo { get => _pistolAmmo; set => _pistolAmmo = value; }
@@ -33,11 +41,14 @@ public class WeaponManager : MonoBehaviour
     public bool ShotEquip { get => _shotgunEquiped; set => _shotgunEquiped = value; }
     public bool BigEquip { get => _bigGunEquiped; set => _bigGunEquiped = value; }
 
-
-
     private void Awake()
     {
+        _hasPistol = false;
+        _hasShotgun = false;
+        _hasBigGun = false;
+        _isShooting = false;
 
+        _currentAnimator.SetBool("IsShooting", false);
     }
     void Update()
     {
@@ -62,6 +73,7 @@ public class WeaponManager : MonoBehaviour
                 _pistolEquiped = true;
                 _shotgunEquiped = false;
                 _bigGunEquiped = false;
+                _currentAnimator = _pisAnimator;
             }
             else
             {
@@ -79,6 +91,7 @@ public class WeaponManager : MonoBehaviour
                 _pistolEquiped = false;
                 _shotgunEquiped = true;
                 _bigGunEquiped = false;
+                _currentAnimator = _shotAnimator;
             }
             else
             {
@@ -96,6 +109,7 @@ public class WeaponManager : MonoBehaviour
                 _pistolEquiped = false;
                 _shotgunEquiped = false;
                 _bigGunEquiped = true;
+                _currentAnimator = _bigAnimator;
             }
             else
             {
@@ -106,8 +120,9 @@ public class WeaponManager : MonoBehaviour
 
     private void Shooting()
     {
-        if (_currentAmmo > 0)
+        if (_currentAnimator.GetBool("IsShooting") == false && _currentAmmo > 0)
         {
+            _currentAnimator.SetBool("IsShooting", true);
             Debug.Log("BANG!");
             _currentAmmo -= 1;
 
@@ -141,14 +156,31 @@ public class WeaponManager : MonoBehaviour
             else if (hit.collider.tag == "Enemy")
             {
                 Debug.Log("You hit an enemy!");
-                
+
+                hit.collider.gameObject.GetComponent<Animator>().SetTrigger("IsHit");
                 hit.collider.gameObject.GetComponent<EnemyScript>().EnemyHealth -= _damage;
+            }
+            else if (hit.collider.tag == "Boss")
+            {
+                HitBoss(hit.collider);
             }
         }
         else
         {
             _currentAmmo = 0;
-            return;
+        }
+        _currentAnimator.SetBool("IsShooting", false);
+    }
+
+    private void HitBoss(Collider hitCollider)
+    {
+        if (hitCollider.gameObject.GetComponent<Boss>().Armour == true)
+        {
+            hitCollider.gameObject.GetComponent<Boss>().EnemyArmour -= _damage;
+        }
+        else
+        {
+            hitCollider.gameObject.GetComponent<Boss>().EnemyHealth -= _damage;
         }
     }
 
@@ -161,10 +193,4 @@ public class WeaponManager : MonoBehaviour
     {
 
     }
-
-    /*private void DamageEnemy(int enemyHealth)
-    {
-        enemyHealth -= _damage;
-        //add code to reduce enemy health by damage variable
-    }*/
 }

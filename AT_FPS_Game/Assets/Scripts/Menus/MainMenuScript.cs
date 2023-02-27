@@ -46,4 +46,9 @@ public class MainMenuScript : MonoBehaviour
     {
 
     }
+
+    private void QuitGame()
+    {
+        Application.Quit();
+    }
 }

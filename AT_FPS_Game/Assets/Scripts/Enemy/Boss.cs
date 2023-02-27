@@ -9,6 +9,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private int _attack;
     [SerializeField] private int _health;
     [SerializeField] private int _armour;
+    [SerializeField] private bool _hasArmour;
 
     [Header("AI Variables")]
     public NavMeshAgent agent;
@@ -33,14 +34,15 @@ public class Boss : MonoBehaviour
     [SerializeField] private PlayerStatus _playerStat;
 
     public int EnemyHealth { get => _health; set => _health = value; }
-    public int EnemyArmor { get => _armour; set => _armour = value; }
-
+    public int EnemyArmour { get => _armour; set => _armour = value; }
+    public bool Armour { get => _hasArmour; set => _hasArmour = value; }
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         _player = GameObject.Find("Player").transform;
         _playerStat = GameObject.Find("Player").GetComponent<PlayerStatus>();
         _newWalkPoint = false;
+        _hasArmour = true;
     }
     private void Update()
     {
@@ -58,6 +60,7 @@ public class Boss : MonoBehaviour
         {
             if (_armour <= 0 )
             {
+                _hasArmour = false;
                 //AttackPhase2();
             }
             else
