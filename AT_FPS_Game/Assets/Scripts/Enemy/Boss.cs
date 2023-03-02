@@ -33,8 +33,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private GameObject _dropBomb;
     [SerializeField] private PlayerStatus _playerStat;
 
-    public int EnemyHealth { get => _health; set => _health = value; }
-    public int EnemyArmour { get => _armour; set => _armour = value; }
+    public int BossHealth { get => _health; set => _health = value; }
+    public int BossArmour { get => _armour; set => _armour = value; }
     public bool Armour { get => _hasArmour; set => _hasArmour = value; }
     private void Awake()
     {
@@ -48,6 +48,7 @@ public class Boss : MonoBehaviour
     {
         _inDodgeRadius = Physics.CheckSphere(gameObject.transform.position, _dodgeRadius, _isPlayer);
         _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
+        _playerTooClose = false;
 
         MovingAround();
 

@@ -112,7 +112,7 @@ public class EnemyScript : MonoBehaviour
                     _sightRadius = 35;
                     _attackRadius = 25;
                     _attackRange = 27;
-                    _attackTime = 5;
+                    _attackTime = 4;
 
                     _itemDrop = _keyCard;
                     break;
@@ -146,10 +146,7 @@ public class EnemyScript : MonoBehaviour
         }
         else if(_inSightRange && _inAttackRange)
         {
-            if (!_isAttacking)
-            {
-                Attacking();
-            }
+            Attacking();  
         }
         else
         {
@@ -194,41 +191,47 @@ public class EnemyScript : MonoBehaviour
     private void Attacking()
     {
         agent.SetDestination(transform.position);
-        _isAttacking = true;
 
-        _animator.SetBool("IsWalking", false);
-        _animator.SetBool("IsShooting", true);
-
-        if (_isMiniBoss)
+        if(!_isAttacking)
         {
-            GameObject gameobj;
-            gameobj = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
-            gameobj.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsShooting", true);
 
-            new WaitForSeconds(0.1f);
-            gameobj = null;
-            StartCoroutine(ResetAttack());
-        }
-        else
-        {
-            RaycastHit hit;
-            Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
-            Debug.DrawRay(transform.position, -transform.forward * _attackRange);
-
-            if (hit.collider.tag == "Player")
+            if (_isMiniBoss)
             {
-                Debug.Log("An enemy has hit you!");
-                DamagePlayer();
-                //StartCoroutine(ResetAttack());
-            }
+                GameObject gameObj1;
+                GameObject gameObj2;
+                gameObj1 = Instantiate(_projectile, (gameObject.transform.position), Quaternion.identity);
+                gameObj1.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
+                gameObj2 = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
+                gameObj2.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
 
-            _animator.SetBool("IsShooting", false);
-            StartCoroutine(ResetAttack());
+                new WaitForSeconds(0.1f);
+                gameObj1 = null;
+                gameObj2 = null;
+                StartCoroutine(ResetAttack());
+            }
+            else
+            {
+                RaycastHit hit;
+                Physics.Raycast(transform.position, -transform.forward, out hit, _attackRange);
+                Debug.DrawRay(transform.position, -transform.forward * _attackRange);
+
+                if (hit.collider.tag == "Player")
+                {
+                    Debug.Log("An enemy has hit you!");
+                    DamagePlayer();
+                    //StartCoroutine(ResetAttack());
+                }
+                StartCoroutine(ResetAttack());
+            }
+            _isAttacking = true;
         }
     }
 
     private IEnumerator ResetAttack()
     {
+        _animator.SetBool("IsWalking", true);
         yield return new WaitForSeconds(_attackTime);
         _isAttacking = false;
     }
@@ -272,9 +275,5 @@ public class EnemyScript : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, _attackRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _sightRadius);
-
-
-        //Gizmos.color = Color.green;
-        //Gizmos.DrawWireSphere(transform.position, _attackRange);
     }
 }

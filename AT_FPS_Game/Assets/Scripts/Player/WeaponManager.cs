@@ -30,8 +30,10 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Transform _transform;
     [SerializeField] private PlayerStatus _playerStat;
 
-    [Header("Canvas Objects")]
-    [SerializeField] private Canvas _pistol;
+    /*[Header("Canvas Objects")]
+    [SerializeField] private Canvas _pistol;*/
+
+
 
     public int CurrentAmmo { get => _currentAmmo; set => _currentAmmo = value; }
     public int PistolAmmo { get => _pistolAmmo; set => _pistolAmmo = value; }
@@ -47,17 +49,11 @@ public class WeaponManager : MonoBehaviour
         _hasShotgun = false;
         _hasBigGun = false;
         _isShooting = false;
-
-        _currentAnimator.SetBool("IsShooting", false);
     }
     void Update()
     {
         CurrentWeaponSwitch();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shooting();
-        }
+        Shooting();
     }
 
     private void CurrentWeaponSwitch()
@@ -103,7 +99,7 @@ public class WeaponManager : MonoBehaviour
             if (_hasBigGun)
             {
                 _currentAmmo = _bigGunAmmo;
-                _weaponRange = 100;
+                _weaponRange = 100; 
                 _damage = 10;
 
                 _pistolEquiped = false;
@@ -120,67 +116,86 @@ public class WeaponManager : MonoBehaviour
 
     private void Shooting()
     {
-        if (_currentAnimator.GetBool("IsShooting") == false && _currentAmmo > 0)
+        if (_currentAmmo <= 0)
         {
-            _currentAnimator.SetBool("IsShooting", true);
-            Debug.Log("BANG!");
-            _currentAmmo -= 1;
-
-            if (_pistolEquiped)
-            {
-                _pistolAmmo -= 1;
-            }
-            if (_shotgunEquiped)
-            {
-                _shotgunAmmo -= 1;
-            }
-            if (_bigGunEquiped)
-            {
-                _bigGunAmmo -= 1;
-            }
-
-            RaycastHit hit;
-            Physics.Raycast(_transform.position, _transform.forward, out hit, _weaponRange);
-            Debug.DrawRay(_transform.position, _transform.forward * _weaponRange);
-
-            if (hit.collider.tag == "Environment")
-            {
-                Debug.Log("You hit someithing!");
-                //HitEnvironment();
-            }
-            else if (hit.collider.tag == "Destructable")
-            {
-                Debug.Log("You hit an exploding barrell!");
-                //HitDestructableObject();
-            }
-            else if (hit.collider.tag == "Enemy")
-            {
-                Debug.Log("You hit an enemy!");
-
-                hit.collider.gameObject.GetComponent<Animator>().SetTrigger("IsHit");
-                hit.collider.gameObject.GetComponent<EnemyScript>().EnemyHealth -= _damage;
-            }
-            else if (hit.collider.tag == "Boss")
-            {
-                HitBoss(hit.collider);
-            }
+            _currentAmmo = 0;
+            return;
         }
         else
         {
-            _currentAmmo = 0;
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (_currentAnimator.GetBool("IsShooting"))
+                {
+                    return;
+                }
+                else
+                {
+                    _currentAnimator.SetBool("IsShooting", true);
+                    Debug.Log("BANG!");
+
+                    RaycastHit hit;
+                    Physics.Raycast(_transform.position, _transform.forward, out hit, _weaponRange);
+                    Debug.DrawRay(_transform.position, _transform.forward * _weaponRange);
+
+                    /*if (hit.collider.tag == "Environment")
+                    {
+                        //HitEnvironment();
+                    }
+                    else if (hit.collider.tag == "Destructable")
+                    {
+                        //HitDestructableObject();
+                    }*/
+                    if (hit.collider.tag == "Enemy")
+                    {
+                        HitEnemy(hit.collider.gameObject);
+                    }
+                    else if (hit.collider.tag == "Boss")
+                    {
+                        HitBoss(hit.collider.gameObject);
+                    }
+
+                    _currentAmmo -= 1;
+
+                    if (_pistolEquiped)
+                    {
+                        _pistolAmmo -= 1;
+                    }
+                    if (_shotgunEquiped)
+                    {
+                        _shotgunAmmo -= 1;
+                    }
+                    if (_bigGunEquiped)
+                    {
+                        _bigGunAmmo -= 1;
+                    }
+                    Debug.Log("Shooting is over");
+                    ResetAttack();
+                }
+            }
         }
+    }
+
+    private void ResetAttack()
+    {
         _currentAnimator.SetBool("IsShooting", false);
     }
 
-    private void HitBoss(Collider hitCollider)
+    private void HitEnemy(GameObject hitObject)
     {
-        if (hitCollider.gameObject.GetComponent<Boss>().Armour == true)
+        hitObject.GetComponent<Animator>().SetTrigger("IsHit");
+        hitObject.GetComponent<EnemyScript>().EnemyHealth -= _damage;
+    }
+
+    private void HitBoss(GameObject hitObject)
+    {
+        if (hitObject.GetComponent<Boss>().Armour == true)
         {
-            hitCollider.gameObject.GetComponent<Boss>().EnemyArmour -= _damage;
+            hitObject.GetComponent<Boss>().BossArmour -= _damage;
         }
         else
         {
-            hitCollider.gameObject.GetComponent<Boss>().EnemyHealth -= _damage;
+            hitObject.GetComponent<Boss>().BossHealth -= _damage;
         }
     }
 

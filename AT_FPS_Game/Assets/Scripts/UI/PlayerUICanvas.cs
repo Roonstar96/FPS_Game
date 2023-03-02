@@ -13,7 +13,6 @@ public class PlayerUICanvas : MonoBehaviour
     [SerializeField] private GameObject _shotgunImage;
     [SerializeField] private GameObject _biggunImage;
 
-
     [SerializeField] private WeaponManager _weapMan;
 
     private void Awake()
