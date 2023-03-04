@@ -64,9 +64,9 @@ public class EnemyScript : MonoBehaviour
                     _health = 10;
                     _isMiniBoss = false;
 
-                    _sightRadius = 30;
-                    _attackRadius = 20;
-                    _attackRange = 22;
+                    _sightRadius = 12;
+                    _attackRadius = 10;
+                    _attackRange = 11;
                     _attackTime = 2;
 
                     _itemdropChance = 5;
@@ -79,9 +79,9 @@ public class EnemyScript : MonoBehaviour
                     _health = 15;
                     _isMiniBoss = false;
 
-                    _sightRadius = 25;
-                    _attackRadius = 15;
-                    _attackRange = 17;
+                    _sightRadius = 15;
+                    _attackRadius = 13;
+                    _attackRange = 14;
                     _attackTime = 2.5f;
 
                     _itemdropChance = 6;
@@ -94,8 +94,8 @@ public class EnemyScript : MonoBehaviour
                     _health = 20;
                     _isMiniBoss = false;
 
-                    _sightRadius = 20;
-                    _attackRadius = 15;
+                    _sightRadius = 18;
+                    _attackRadius = 16;
                     _attackRange = 17;
                     _attackTime = 3;
 

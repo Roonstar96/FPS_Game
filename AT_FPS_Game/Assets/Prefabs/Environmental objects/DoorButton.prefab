@@ -111,6 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshRen: {fileID: 1713190219056804401}
-  _offMat: {fileID: 2100000, guid: 154e374f88c3d4a4eb7d984b165944c0, type: 2}
-  _onMat: {fileID: 2100000, guid: 41a77d9ff50da794c9f2be8a09ce5265, type: 2}
+  _offMat: {fileID: 2100000, guid: a7d0f4f4468596f42973de2ccef76cab, type: 2}
+  _onMat: {fileID: 2100000, guid: 4747740c5d3420b4485316886f62d1c1, type: 2}
   _isOn: 0
