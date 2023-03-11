@@ -41,64 +41,64 @@ public class CollectablesScript : MonoBehaviour
                 case Collectables.pistol:
                     {
                         _type = "Pistol";
-                        _weaponMan.PistolAmmo += 45;
-                        _weaponMan._hasPistol = true;
+                        WeaponManager.PistolAmmo += 45;
+                        WeaponManager.HasPistol = true;
                         break;
                     }
                 case Collectables.pistolAmmo:
                     {
                         _type = "Pistol Ammo";
-                        _weaponMan.PistolAmmo += 15;
+                        WeaponManager.PistolAmmo += 15;
                         break;
                     }
                 case Collectables.shotGun:
                     {
                         _type = "Shotgun";
-                        _weaponMan.ShotgunAmmo += 30;
-                        _weaponMan._hasShotgun = true;
+                        WeaponManager.ShotgunAmmo += 30;
+                        WeaponManager.HasShotgun = true;
                         break;
                     }
                 case Collectables.shotgunAmmo:
                     {
                         _type = "Shotgun Ammo";
-                        _weaponMan.ShotgunAmmo += 8;
+                        WeaponManager.ShotgunAmmo += 8;
                         break;
                     }
                 case Collectables.bigGun:
                     {
                         _type = "Big gun";
-                        _weaponMan.BigGunAmmo += 20;
-                        _weaponMan._hasBigGun = true;
+                        WeaponManager.BigGunAmmo += 20;
+                        WeaponManager.HasBiggun = true;
                         break;
                     }
                 case Collectables.biggunAmmo:
                     {
                         _type = "Big gun Ammo";
-                        _weaponMan.BigGunAmmo += 5;
+                        WeaponManager.BigGunAmmo += 5;
                         break;
                     }
                 case Collectables.healthWeak:
                     {
                         _type = "Small Health pack";
-                        _playerStat.Health += 25;
+                        PlayerStatus.Health += 25;
                         break;
                     }
                 case Collectables.healthStrong:
                     {
                         _type = "Large Health pack";
-                        _playerStat.Health += 50;
+                        PlayerStatus.Health += 50;
                         break;
                     }
                 case Collectables.armorWeak:
                     {
                         _type = "Weak armor";
-                        _playerStat.Armour += 25;
+                        PlayerStatus.Armour += 25;
                         break;
                     }
                 case Collectables.armorStrong:
                     {
                         _type = "Strong armor";
-                        _playerStat.Armour += 50;
+                        PlayerStatus.Armour += 50;
                         break;
                     }
             }

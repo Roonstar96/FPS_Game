@@ -148,11 +148,11 @@ public class Boss : MonoBehaviour
     {
         if (PlayerStatus._hasArmour)
         {
-            _playerStat.Armour -= _attack;
+            PlayerStatus.Armour -= _attack;
         }
         else
         {
-            _playerStat.Health -= _attack;
+            PlayerStatus.Health -= _attack;
         }
     }
 

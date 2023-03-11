@@ -1,54 +1,96 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class MainMenuScript : MonoBehaviour
 {
-    [SerializeField] private Canvas _mainMenu;
-    [SerializeField] private Canvas _levelSelect;
-    [SerializeField] private Canvas _options;
+    [Header("Canvas's & Buttons")]
+    [SerializeField] private GameObject _mainMenu, _levelSelect, _options;
+    [SerializeField] private GameObject _playerButton, _returnToMainButton;
 
-    public static bool _level1;
-    public static bool _level2;
-    public static bool _level3;
-    public static bool _level4;
-    public static bool _level5;
+    [Header("Level buttons")]
+    [SerializeField] private GameObject[] _levelButtons = new GameObject[4];
 
+    [SerializeField] private GameManagerScript _gameMan;
     private void Awake()
     {
-        _mainMenu.enabled = true;
-        _levelSelect.enabled = false;
-        _options.enabled = false;
-
-        _level1 = false;
-        _level2 = false;
-        _level3 = false;
-        _level4 = false;
-        _level5 = false;
+        _mainMenu.SetActive(true);
+        _levelSelect.SetActive(false);
+        _options.SetActive(false);
     }
 
-    private void InMainMenu()
+    public void PlayButton()
     {
-
+        LevelSelect();
+        //SceneManager.LoadScene(1);
     }
 
-    private void InLevelSelect()
+    public void LevelSelect()
     {
+        _levelSelect.SetActive(true);
+        _mainMenu.SetActive(false);
 
+        if (_gameMan.Level2)
+        {
+            _levelButtons[0].SetActive(true);
+        }
+        if (_gameMan.Level3)
+        {
+            _levelButtons[1].SetActive(true);
+        }
+        if (_gameMan.Level4)
+        {
+            _levelButtons[2].SetActive(true);
+        }
+        if (_gameMan.Level5)
+        {
+            _levelButtons[3].SetActive(true);
+        }
     }
 
-    private void InOptions()
+    public void Options()
     {
-
+        _options.SetActive(true);
+        _mainMenu.SetActive(false);
     }
 
-    private void ReturnToMenu()
+    public void RetroFilter()
     {
-
+        //turn on pixel shader thing
     }
 
-    private void QuitGame()
+    public void ReturnToMenu()
+    {
+        _mainMenu.SetActive(true);
+        _levelSelect.SetActive(false);
+        _options.SetActive(false);
+    }
+
+    public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void PlayLevel1()
+    {
+        SceneManager.LoadScene(1);
+    }
+    public void PlayLevel2()
+    {
+
+    }
+    public void PlayLevel3()
+    {
+
+    }
+    public void PlayLevel4()
+    {
+
+    }
+    public void PlayLevel5()
+    {
+
     }
 }

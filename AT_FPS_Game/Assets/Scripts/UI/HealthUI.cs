@@ -12,6 +12,6 @@ public class HealthUI : MonoBehaviour
     }
     private void Update()
     {
-        _health.text = ("HEALTH: " + _playerStat.Health);
+        _health.text = ("HEALTH: " + PlayerStatus.Health);
     }
 }

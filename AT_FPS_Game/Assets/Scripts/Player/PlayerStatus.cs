@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [SerializeField] private int _health;
-    [SerializeField] private int _armour;
-    [SerializeField] private WeaponManager _weapons;
+    [SerializeField] private static int _health;
+    [SerializeField] private static int _armour;
+    [SerializeField] private Canvas _gameOver;
 
     public static bool _hasArmour;
 
@@ -14,8 +14,8 @@ public class PlayerStatus : MonoBehaviour
     private int _armorMax;
     private int _ammoMax;
 
-    public int Health { get => _health; set => _health = value; }
-    public int Armour { get => _armour; set => _armour = value; }
+    public static int Health { get => _health; set => _health = value; }
+    public static int Armour { get => _armour; set => _armour = value; }
 
     private void Awake()
     {
@@ -37,7 +37,6 @@ public class PlayerStatus : MonoBehaviour
 
     private void UpdateHealth()
     {
-
         if (_health <= 0)
         {
             GameOver();
@@ -67,6 +66,6 @@ public class PlayerStatus : MonoBehaviour
 
     private void GameOver()
     {
-        //Load game over scene here
+        _gameOver.enabled = true;
     }
 }

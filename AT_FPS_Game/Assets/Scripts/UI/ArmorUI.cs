@@ -12,6 +12,6 @@ public class ArmorUI : MonoBehaviour
     }
     private void Update()
     {
-        _armor.text = ("ARMOR: " + _playerStat.Armour);
+        _armor.text = ("ARMOR: " + PlayerStatus.Armour);
     }
 }

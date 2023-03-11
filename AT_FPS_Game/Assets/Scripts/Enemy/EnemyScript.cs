@@ -136,6 +136,8 @@ public class EnemyScript : MonoBehaviour
         _inSightRange = Physics.CheckSphere(gameObject.transform.position, _sightRadius, _isPlayer);
         _inAttackRange = Physics.CheckSphere(gameObject.transform.position, _attackRadius, _isPlayer);
 
+        Patrolling();
+
         if (_health <= 0)
         {
             Dying();
@@ -148,10 +150,7 @@ public class EnemyScript : MonoBehaviour
         {
             Attacking();  
         }
-        else
-        {
-            Patrolling();
-        }
+
     }
 
     private void Patrolling()
@@ -240,11 +239,11 @@ public class EnemyScript : MonoBehaviour
     {
         if(PlayerStatus._hasArmour)
         {
-            _playerStat.Armour -= _attack;
+            PlayerStatus.Armour -= _attack;
         }
         else
         {
-            _playerStat.Health -= _attack;
+            PlayerStatus.Health -= _attack;
         }
     }
 

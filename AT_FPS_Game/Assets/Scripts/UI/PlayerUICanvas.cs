@@ -18,6 +18,7 @@ public class PlayerUICanvas : MonoBehaviour
     private void Awake()
     {
         _weapMan = GameObject.Find("Player").GetComponent<WeaponManager>();
+        //_weapMan.enabled = true;
     }
     private void Update()
     {
