@@ -9,13 +9,13 @@ public class GameManagerScript : MonoBehaviour
     //add arrays for level & playerspawn objects
     //add canvas
     //public static GameObject[] _levelMenuButtons = new GameObject[4];
-
+    [Header("Game level objects & spawn points")]
     [SerializeField] private GameObject[] _levelObjects;
-    [SerializeField] private GameObject[] _playerSpawnObj;
+    [SerializeField] private Transform[] _playerSpawnObj;
 
-    [SerializeField] private GameObject _player;
+    [SerializeField] private Transform _player;
+    [SerializeField] private GameObject _levelCompleteCanvas;
     [SerializeField] private GameObject _gameOverCanvas;
-    [SerializeField] private MainMenuScript _mainMenu;
 
     public static int i;
 
@@ -38,12 +38,20 @@ public class GameManagerScript : MonoBehaviour
         _level3 = false;
         _level4 = false;
         _level5 = false;
+
+        i = 0;
     }
 
     public void LevelLoadFunction()
     {
+        _levelObjects[i - 1].SetActive(false);
         _levelObjects[i].SetActive(true);
-        _player.transform.position = _playerSpawnObj[i].transform.position;
+        _player.position = _playerSpawnObj[i].position;
+
+        Time.timeScale = 1;
+        _levelCompleteCanvas.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+
         MusicManagerFunction();
     }
 
@@ -52,18 +60,7 @@ public class GameManagerScript : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private void CanvasManagerFunction()
-    {
-        //add funcitons for rendering Win/lose/level complete canvases
-        _gameOverCanvas.SetActive(true);
-    }
-
-    private void MusicManagerFunction()
-    {
-        _levelObjects[i].GetComponent<AudioSource>().Play();
-    }
-
-    private void ResetLevelFunction()
+    public void ResetLevelFunction()
     {
         SceneManager.LoadScene(1);
 
@@ -89,5 +86,18 @@ public class GameManagerScript : MonoBehaviour
         _levelObjects[i].SetActive(true);
         _player.transform.position = _playerSpawnObj[i].transform.position;
 
+        Time.timeScale = 1;
     }
+
+    private void CanvasManagerFunction()
+    {
+        //add funcitons for rendering Win/lose/level complete canvases
+        _gameOverCanvas.SetActive(true);
+    }
+
+    private void MusicManagerFunction()
+    {
+        _levelObjects[i].GetComponent<AudioSource>().Play();
+    }
+
 }

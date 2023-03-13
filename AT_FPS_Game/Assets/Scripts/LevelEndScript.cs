@@ -21,6 +21,9 @@ public class LevelEndScript : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0;
+
             switch (_levelType)
             {
                 case (LevelEndType.Level1):

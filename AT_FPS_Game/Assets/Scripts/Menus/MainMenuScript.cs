@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 
 public class MainMenuScript : MonoBehaviour
 {
-    [Header("Canvas's & Buttons")]
-    [SerializeField] private GameObject _mainMenu, _levelSelect, _options;
-    [SerializeField] private GameObject _playerButton, _returnToMainButton;
+    [Header("Canvas's")]
+    [SerializeField] private GameObject _mainMenu;
+    [SerializeField] private GameObject _levelSelect;
+    [SerializeField] private GameObject _options;
+    //[SerializeField] private GameObject _playerButton, _returnToMainButton;
 
     [Header("Level buttons")]
     [SerializeField] private GameObject[] _levelButtons = new GameObject[4];
@@ -19,6 +21,7 @@ public class MainMenuScript : MonoBehaviour
         _mainMenu.SetActive(true);
         _levelSelect.SetActive(false);
         _options.SetActive(false);
+
     }
 
     public void PlayButton()

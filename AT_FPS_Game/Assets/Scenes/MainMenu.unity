@@ -768,12 +768,12 @@ GameObject:
   - component: {fileID: 274785767}
   - component: {fileID: 274785766}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Level4_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &274785765
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1654,11 +1654,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainMenu: {fileID: 142641362}
-  _playerButton: {fileID: 0}
   _levelSelect: {fileID: 905465665}
-  _level1Button: {fileID: 0}
   _options: {fileID: 1998246088}
-  _returnToMainButton: {fileID: 0}
+  _levelButtons:
+  - {fileID: 1365852867}
+  - {fileID: 2051861351}
+  - {fileID: 274785764}
+  - {fileID: 1091604832}
+  _gameMan: {fileID: 1113115962}
 --- !u!4 &801764648
 Transform:
   m_ObjectHideFlags: 0
@@ -1930,12 +1933,12 @@ GameObject:
   - component: {fileID: 1091604835}
   - component: {fileID: 1091604834}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Level5_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1091604833
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2087,7 +2090,6 @@ MonoBehaviour:
   _playerSpawnObj: []
   _player: {fileID: 0}
   _gameOverCanvas: {fileID: 0}
-  _mainMenu: {fileID: 0}
 --- !u!1 &1165251644
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,12 +2889,12 @@ GameObject:
   - component: {fileID: 1365852870}
   - component: {fileID: 1365852869}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Level2_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1365852868
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4754,12 +4756,12 @@ GameObject:
   - component: {fileID: 2051861354}
   - component: {fileID: 2051861353}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Level3_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2051861352
 RectTransform:
   m_ObjectHideFlags: 0
