@@ -112,7 +112,7 @@ Animator:
   m_GameObject: {fileID: 3665602751555274404}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0f23ce91ff25ad6458e0518d92cc336e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 02403ce1cb8b655489015fb67f7d7e04, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a5e7dfd6876b44fb24bb254cd74e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyType: 0
+  _enemyType: 3
   _attack: 0
   _health: 0
   _isMiniBoss: 1
@@ -192,7 +192,7 @@ MonoBehaviour:
   _attackTime: 0
   _inAttackRange: 0
   _isAttacking: 0
-  _projectile: {fileID: 0}
+  _projectile: {fileID: 8712806205399924790, guid: 6019e18858fca4a4bbad871c9dcfc503, type: 3}
   _playerStat: {fileID: 0}
   _itemdropChance: 0
   _itemDrop: {fileID: 0}

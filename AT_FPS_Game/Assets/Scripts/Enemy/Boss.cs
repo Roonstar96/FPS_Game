@@ -29,6 +29,10 @@ public class Boss : MonoBehaviour
     [SerializeField] private float _attackRadius;
     [SerializeField] private float _attackTime;
     [SerializeField] private bool _inAttackRange;
+
+    [Header("Mine & projectile Settings")]
+    [SerializeField] private bool _isDropping;
+    [SerializeField] private float _dropTime;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private GameObject _dropBomb;
     [SerializeField] private PlayerStatus _playerStat;
@@ -62,11 +66,11 @@ public class Boss : MonoBehaviour
             if (_armour <= 0 )
             {
                 _hasArmour = false;
-                //AttackPhase2();
+                AttackPhase2();
             }
             else
             {
-                //AttackPhase1();
+                AttackPhase1();
             }
         }
     }
@@ -135,13 +139,23 @@ public class Boss : MonoBehaviour
         gameobj = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
         gameobj.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
 
-        if (_playerTooClose)
+        if (_playerTooClose && !_isDropping)
         {
+            _isDropping = true;
+            StartCoroutine(DropMine());
             GameObject dropObj;
             dropObj = Instantiate(_dropBomb, gameObject.transform.position, Quaternion.identity);
         }
         //Instantiate projectile at set interval
         //Tnstatiate dropped bomb while playing in dodge range 
+    }
+
+    private IEnumerator DropMine()
+    {
+        GameObject dropObj;
+        dropObj = Instantiate(_dropBomb, gameObject.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(_dropTime);
+        _isDropping = false;
     }
 
     private void DamagePlayer()

@@ -10,16 +10,18 @@ enum BombType
 
 public class Projectile_Mine : MonoBehaviour
 {
-    [Header("Sprite Variables")]
-    [SerializeField] private Sprite _project;
-    [SerializeField] private Sprite _mine;
-    [SerializeField] private SpriteRenderer _spriteRend;
-
     [Header("Object variables")]
     [SerializeField] private BombType _bombType;
     [SerializeField] private Animator _anim;
-    [SerializeField] private float _radius;
-    [SerializeField] private float _damage;
+    [SerializeField] private BoxCollider _cube;
+    [SerializeField] private Vector3 _centre;
+
+    [Header("Explosion variables")]
+    [SerializeField] private int _damage;
+    [SerializeField] private float _detectRadius;
+    [SerializeField] private float _damageRadius;
+    [SerializeField] private bool _inDamageRange;
+    [SerializeField] private LayerMask _isPlayer;
 
     private void Awake()
     {
@@ -27,27 +29,49 @@ public class Projectile_Mine : MonoBehaviour
         {
             case (BombType.Projectile):
                 {
-                    _spriteRend.sprite = _project;
-                    _radius = 3.5f;
-                    _damage = 5;
+                    _detectRadius = 1f;
+                    _damageRadius = 3.5f;
+                    _damage = 10;
                     break;
                 }
             case (BombType.LandMine):
                 {
-                    _spriteRend.sprite = _mine;
-                    _radius = 3.5f;
-                    _damage = 5;
+                    _detectRadius = 2f;
+                    _damageRadius = 3.5f;
+                    _damage = 10;
                     break;
                 }
         }
+        _cube.size = new Vector3(_detectRadius, 0.5f, _detectRadius + 1);
+        _centre = gameObject.transform.position;
+        _anim.SetBool("OnHit", false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //trigger animation
-        //activate sphere
-        //damage anything in the sphere
-        //destroy object
+        RaycastHit hit;
+        _inDamageRange = Physics.CheckSphere(_centre, _damageRadius, _isPlayer);
+        _anim.SetBool("OnHit", true);
+
+        if (_inDamageRange)
+        {
+            if(PlayerStatus._hasArmour)
+            {
+                PlayerStatus.Armour -= _damage;
+                PlayerStatus.Health -= (_damage / 4);
+            }
+            else 
+            {
+                PlayerStatus.Health -= _damage;
+            }
+        }
+        StartCoroutine(DestroyBomb());
     }
 
+    private IEnumerator DestroyBomb()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Destroying Bomb");
+        Destroy(gameObject);
+    }
 }   

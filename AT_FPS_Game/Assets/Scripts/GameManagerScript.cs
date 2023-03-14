@@ -44,19 +44,14 @@ public class GameManagerScript : MonoBehaviour
 
     public void LevelLoadFunction()
     {
-        _levelObjects[i - 1].SetActive(false);
-        _levelObjects[i].SetActive(true);
-        _player.position = _playerSpawnObj[i].position;
-
         Time.timeScale = 1;
-        _levelCompleteCanvas.SetActive(false);
+        SceneManager.LoadScene(i);
         Cursor.lockState = CursorLockMode.Locked;
-
-        MusicManagerFunction();
     }
 
     public void ReturnToMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 
@@ -83,21 +78,11 @@ public class GameManagerScript : MonoBehaviour
             WeaponManager.BigGunAmmo = 20;
         }
 
-        _levelObjects[i].SetActive(true);
-        _player.transform.position = _playerSpawnObj[i].transform.position;
-
         Time.timeScale = 1;
     }
 
     private void CanvasManagerFunction()
     {
-        //add funcitons for rendering Win/lose/level complete canvases
         _gameOverCanvas.SetActive(true);
     }
-
-    private void MusicManagerFunction()
-    {
-        _levelObjects[i].GetComponent<AudioSource>().Play();
-    }
-
 }

@@ -201,13 +201,14 @@ public class EnemyScript : MonoBehaviour
                 GameObject gameObj1;
                 GameObject gameObj2;
                 gameObj1 = Instantiate(_projectile, (gameObject.transform.position), Quaternion.identity);
-                gameObj1.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
                 gameObj2 = Instantiate(_projectile, gameObject.transform.position, Quaternion.identity);
-                gameObj2.GetComponent<Rigidbody>().AddForce(-_player.position * 50);
+                gameObj1.AddComponent<Rigidbody>().AddForce(-_player.forward * 15);
+                gameObj2.AddComponent<Rigidbody>().AddForce(-_player.forward * 15);
 
                 new WaitForSeconds(0.1f);
                 gameObj1 = null;
                 gameObj2 = null;
+                _isAttacking = true;
                 StartCoroutine(ResetAttack());
             }
             else
@@ -222,9 +223,9 @@ public class EnemyScript : MonoBehaviour
                     DamagePlayer();
                     //StartCoroutine(ResetAttack());
                 }
+                _isAttacking = true;
                 StartCoroutine(ResetAttack());
             }
-            _isAttacking = true;
         }
     }
 

@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private static int _pistolAmmo;
     [SerializeField] private static int _shotgunAmmo;
     [SerializeField] private static int _bigGunAmmo;
-    [SerializeField] private int _currentAmmo;
+    [SerializeField] private static int _currentAmmo;
     [SerializeField] private int _weaponRange;
     [SerializeField] private int _damage;
     [SerializeField] private Animator _pisAnimator;
@@ -18,9 +18,9 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Animator _currentAnimator;
 
     [Header("Weapon Booleans")]
-    [SerializeField] private bool _pistolEquiped;
-    [SerializeField] private bool _shotgunEquiped;
-    [SerializeField] private bool _bigGunEquiped;
+    [SerializeField] private static bool _pistolEquiped;
+    [SerializeField] private static bool _shotgunEquiped;
+    [SerializeField] private static bool _bigGunEquiped;
     [SerializeField] private static bool _hasPistol;
     [SerializeField] private static bool _hasShotgun;
     [SerializeField] private static bool _hasBigGun;
@@ -38,16 +38,16 @@ public class WeaponManager : MonoBehaviour
 
     UnityEvent _clickEvent;
 
-    public int CurrentAmmo { get => _currentAmmo; set => _currentAmmo = value; }
+    public static int CurrentAmmo { get => _currentAmmo; set => _currentAmmo = value; }
     public static int PistolAmmo { get => _pistolAmmo; set => _pistolAmmo = value; }
     public static int ShotgunAmmo { get => _shotgunAmmo; set => _shotgunAmmo = value; }
     public static int BigGunAmmo { get => _bigGunAmmo; set => _bigGunAmmo = value; }
     public static bool HasPistol { get => _hasPistol; set => _hasPistol = value; }
     public static bool HasShotgun { get => _hasShotgun; set => _hasShotgun = value; }
     public static bool HasBiggun { get => _hasBigGun; set => _hasBigGun = value; } 
-    public bool PisEquip { get => _pistolEquiped; set => _pistolEquiped = value; }
-    public bool ShotEquip { get => _shotgunEquiped; set => _shotgunEquiped = value; }
-    public bool BigEquip { get => _bigGunEquiped; set => _bigGunEquiped = value; }
+    public static bool PisEquip { get => _pistolEquiped; set => _pistolEquiped = value; }
+    public static bool ShotEquip { get => _shotgunEquiped; set => _shotgunEquiped = value; }
+    public static bool BigEquip { get => _bigGunEquiped; set => _bigGunEquiped = value; }
 
     private void Awake()
     {
@@ -134,7 +134,6 @@ public class WeaponManager : MonoBehaviour
 
     public void ShootingAnimation()
     {
-        Debug.Log("BANG!");
         _currentAnimator.SetBool("IsShooting", true);
 
         _currentAmmo -= 1;
@@ -152,33 +151,21 @@ public class WeaponManager : MonoBehaviour
             _bigGunAmmo -= 1;
         }
 
-        Debug.Log("Casting ray (winston)");
         ShootingRayCast();
 
-        Debug.Log("Time to wait");
         new WaitForSeconds(_currentAnimTime);
     }
 
     private void ShootingRayCast()
     {
-        Debug.Log("Rey palpatine is cast");
         RaycastHit hit;
         Physics.Raycast(_transform.position, _transform.forward, out hit, _weaponRange);
         Debug.DrawRay(_transform.position, _transform.forward * _weaponRange);
 
-        Debug.Log("Now they are done");
         if (hit.collider.tag == "Enemy")
         {
             HitEnemy(hit.collider.gameObject);
         }
-        /*if (hit.collider.tag == "Environment")
-        {
-            //HitEnvironment();
-        }
-        else if (hit.collider.tag == "Destructable")
-        {
-            //HitDestructableObject();
-        }*/
         StartCoroutine(ResetAttack());
     }
 
@@ -186,7 +173,6 @@ public class WeaponManager : MonoBehaviour
     {
         yield return new WaitForSeconds(_currentAnimTime);
         _currentAnimator.SetBool("IsShooting", false);
-        Debug.Log("Shooting is over");
     }
 
     public void HitEnemy(GameObject hitObject)
@@ -208,15 +194,5 @@ public class WeaponManager : MonoBehaviour
                 hitObject.GetComponent<Boss>().BossHealth -= _damage;
             }
         }
-    }
-
-    private void HitEnvironment()
-    {
-
-    }
-
-    private void HitDestructableObject()
-    {
-
     }
 }

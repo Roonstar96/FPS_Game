@@ -13,16 +13,9 @@ public class PlayerUICanvas : MonoBehaviour
     [SerializeField] private GameObject _shotgunImage;
     [SerializeField] private GameObject _biggunImage;
 
-    [SerializeField] private WeaponManager _weapMan;
-
-    private void Awake()
-    {
-        _weapMan = GameObject.Find("Player").GetComponent<WeaponManager>();
-        //_weapMan.enabled = true;
-    }
     private void Update()
     {
-        if (_weapMan.PisEquip)
+        if (WeaponManager.PisEquip)
         {
             _pistolSlot.SetActive(true);
             _shotgunSlot.SetActive(false);
@@ -32,7 +25,7 @@ public class PlayerUICanvas : MonoBehaviour
             _shotgunImage.SetActive(false);
             _biggunImage.SetActive(false);
         }
-        if(_weapMan.ShotEquip)
+        if(WeaponManager.ShotEquip)
         {
             _pistolSlot.SetActive(false);
             _shotgunSlot.SetActive(true);
@@ -42,7 +35,7 @@ public class PlayerUICanvas : MonoBehaviour
             _shotgunImage.SetActive(true);
             _biggunImage.SetActive(false);
         }
-        if (_weapMan.BigEquip)
+        if (WeaponManager.BigEquip)
         {
             _pistolSlot.SetActive(false);
             _shotgunSlot.SetActive(false);

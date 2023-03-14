@@ -56,11 +56,10 @@ public class LevelEndScript : MonoBehaviour
                 case (LevelEndType.EndLevel):
                     {
                         _gameMan.Level5 = true;
-                        SceneManager.LoadScene(2);
+                        SceneManager.LoadScene(6);
                         break;
                     }
             }
         }  
     }
-
 }

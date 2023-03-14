@@ -21,13 +21,11 @@ public class MainMenuScript : MonoBehaviour
         _mainMenu.SetActive(true);
         _levelSelect.SetActive(false);
         _options.SetActive(false);
-
     }
 
     public void PlayButton()
     {
         LevelSelect();
-        //SceneManager.LoadScene(1);
     }
 
     public void LevelSelect()
@@ -61,7 +59,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void RetroFilter()
     {
-        //turn on pixel shader thing
+        
     }
 
     public void ReturnToMenu()
@@ -78,22 +76,32 @@ public class MainMenuScript : MonoBehaviour
 
     public void PlayLevel1()
     {
+        WeaponManager.HasPistol = true;
+        WeaponManager.PistolAmmo = 40;
         SceneManager.LoadScene(1);
     }
     public void PlayLevel2()
     {
-
+        WeaponManager.HasPistol = true;
+        WeaponManager.PistolAmmo = 40;
+        SceneManager.LoadScene(2);
     }
     public void PlayLevel3()
     {
-
+        WeaponManager.HasPistol = true;
+        WeaponManager.PistolAmmo = 40;
+        SceneManager.LoadScene(3);
     }
     public void PlayLevel4()
     {
-
+        WeaponManager.HasPistol = true;
+        WeaponManager.PistolAmmo = 40;
+        SceneManager.LoadScene(4);
     }
     public void PlayLevel5()
     {
-
+        WeaponManager.HasPistol = true;
+        WeaponManager.PistolAmmo = 40;
+        SceneManager.LoadScene(5);
     }
 }
